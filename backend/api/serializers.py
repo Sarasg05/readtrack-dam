@@ -27,6 +27,9 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class ReadingSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
     class Meta:
         model = Reading
         fields = ['id', 'user', 'book', 'start_date', 'end_date', 'status']

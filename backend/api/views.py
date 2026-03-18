@@ -16,8 +16,11 @@ class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
 
 class AnnualGoalViewSet(viewsets.ModelViewSet):
-    queryset = AnnualGoal.objects.all()
     serializer_class = AnnualGoalSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return AnnualGoal.objects.filter(user=user)
 
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
@@ -28,8 +31,11 @@ class GenreViewSet(viewsets.ModelViewSet):
     serializer_class = GenreSerializer
 
 class ReadingViewSet(viewsets.ModelViewSet):
-    queryset = Reading.objects.all()
     serializer_class = ReadingSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Reading.objects.filter(user=user)
 
 class ReadingSessionViewSet(viewsets.ModelViewSet):
     queryset = ReadingSession.objects.all()
