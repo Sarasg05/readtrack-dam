@@ -4,20 +4,15 @@ from .views import (
     AuthorViewSet,
     GenreViewSet,
     BookViewSet,
-    ReadingViewSet,
+    readings,
+    reading_by_id,
     ReadingSessionViewSet,
     AnnualGoalViewSet
 )
 
-router = DefaultRouter()
 
-router.register(r'authors', AuthorViewSet)
-router.register(r'genres', GenreViewSet)
-router.register(r'books', BookViewSet)
-router.register(r'readings', ReadingViewSet)
-router.register(r'sessions', ReadingSessionViewSet)
-router.register(r'goals', AnnualGoalViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('readings/', readings),
+    path('readings/<int:id>/', reading_by_id),
 ]
