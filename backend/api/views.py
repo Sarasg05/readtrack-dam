@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 
 from .models import AnnualGoal, Author, Genre, Book, Reading, ReadingSession
 from .serializers import (
@@ -35,7 +36,7 @@ class ReadingViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        return Reading.objects.filter(user=user)
+        return Reading.objects.filter(user=self.request.user)
 
 class ReadingSessionViewSet(viewsets.ModelViewSet):
     queryset = ReadingSession.objects.all()
