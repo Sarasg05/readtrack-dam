@@ -13,10 +13,12 @@ from .serializers import (
 )
 
 class BookViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
 class AnnualGoalViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = AnnualGoal.objects.all()
     serializer_class = AnnualGoalSerializer
 
@@ -25,14 +27,17 @@ class AnnualGoalViewSet(viewsets.ModelViewSet):
         return AnnualGoal.objects.filter(user=user)
 
 class AuthorViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
 class GenreViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
 
 class ReadingViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Reading.objects.all()
     serializer_class = ReadingSerializer
 
@@ -41,8 +46,12 @@ class ReadingViewSet(viewsets.ModelViewSet):
         return Reading.objects.filter(user=self.request.user)
 
 class ReadingSessionViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = ReadingSession.objects.all()
     serializer_class = ReadingSessionSerializer
+
+    def get_queryset(self):
+        return ReadingSession.objects.filter(reading__user=self.request.user)
 
 
 

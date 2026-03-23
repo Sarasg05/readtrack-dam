@@ -59,8 +59,8 @@ class Reading(models.Model):
 class ReadingSession(models.Model):
     reading = models.ForeignKey(Reading, on_delete=models.CASCADE)
     date = models.DateField()
-    pages_read = models.IntegerField()
-    minutes_read = models.IntegerField()
+    pages_read = models.PositiveIntegerField()
+    minutes_read = models.PositiveIntegerField()
 
     def __str__(self):
         return f"{self.date} - {self.pages_read} pages"
