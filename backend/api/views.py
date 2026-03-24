@@ -1,19 +1,9 @@
 from django.http import JsonResponse
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
 import json
 
 from .models import AnnualGoal, Author, Genre, Book, Reading, ReadingSession
-from .serializers import (
-    AnnualGoalSerializer,
-    AuthorSerializer,
-    GenreSerializer,
-    BookSerializer,
-    ReadingSerializer,
-    ReadingSessionSerializer
-)
+
 
 
 @csrf_exempt
@@ -39,6 +29,12 @@ def books(request):
 
         if body.get('title') is None:
             return JsonResponse({'error': 'Missing title'}, status=400)
+
+        if body.get('author') is None:
+            return JsonResponse({'error': 'Missing author'}, status=400)
+
+        if body.get('total_pages') is None:
+            return JsonResponse({'error': 'Missing total_pages'}, status=400)
 
         book = Book.objects.create(
             title=body['title'],
@@ -90,20 +86,30 @@ def annual_goals(request):
 
         annual_goals = AnnualGoal.objects.all()
         if user_id:
-            annual_goals = readings.filter(user_id=user_id)
+            annual_goals = annual_goals.filter(user_id=user_id)
 
         response = []
         for a in annual_goals:
-            response.append([{
+            response.append({
                 'id': a.id,
                 'year': a.year,
-                'target_books': a.target_books
-            }])
+                'target_books': a.target_books,
+                'user': a.user.id
+            })
 
         return JsonResponse(response, safe=False)
 
     elif request.method == 'POST':
         body = json.loads(request.body)
+
+        if body.get('user') is None:
+            return JsonResponse({'error': 'Missing user'}, status=400)
+
+        if body.get('year') is None:
+            return JsonResponse({'error': 'Missing year'}, status=400)
+
+        if body.get('target_books') is None:
+            return JsonResponse({'error': 'Missing target_books'}, status=400)
 
         annual_goal = AnnualGoal.objects.create(
             user_id=body['user'],
@@ -217,19 +223,33 @@ def readings(request):
                 'id': r.id,
                 'book': r.book.title,
                 'status': r.status,
-                'start_date': r.start_date,
-                'end_date': r.end_date
+                'start_date': r.start_date.isoformat() if r.start_date else None,
+                'end_date': r.end_date.isoformat() if r.end_date else None
             })
 
         return JsonResponse(response, safe=False)
 
     elif request.method == 'POST':
+
         body = json.loads(request.body)
 
+        if body.get('user') is None:
+            return JsonResponse({'error': 'Missing user'}, status=400)
+
+        if body.get('book') is None:
+            return JsonResponse({'error': 'Missing book'}, status=400)
+
+        if body.get('status') is None:
+            return JsonResponse({'error': 'Missing status'}, status=400)
+
         reading = Reading.objects.create(
+
             user_id=body['user'],
+
             book_id=body['book'],
+
             status=body['status']
+
         )
 
         return JsonResponse({'id': reading.id}, status=201)
@@ -267,19 +287,16 @@ def reading_by_id(request, id):
 @csrf_exempt
 def reading_sessions(request):
     if request.method == 'GET':
-        user_id = request.GET.get('user', None)
-
-        reading_sessions = ReadingSession.objects.all()
-        if user_id:
-            reading_sessions = reading_sessions.filter(user_id=user_id)
+        sessions = ReadingSession.objects.all()
 
         response = []
-        for s in reading_sessions:
+        for s in sessions:
             response.append({
                 'id': s.id,
-                'reading': [r.id for r in s.readings.all()],
+                'reading': s.reading.id,
                 'pages_read': s.pages_read,
-                'minutes_read': s.minutes_read
+                'minutes_read': s.minutes_read,
+                'date': s.date.isoformat()
             })
 
         return JsonResponse(response, safe=False)
@@ -287,32 +304,47 @@ def reading_sessions(request):
     elif request.method == 'POST':
         body = json.loads(request.body)
 
-        reading = Reading.objects.create(
-            user_id=body['user'],
+        if body.get('reading') is None:
+            return JsonResponse({'error': 'Missing reading'}, status=400)
+
+        if body.get('pages_read') is None:
+            return JsonResponse({'error': 'Missing pages_read'}, status=400)
+
+        if body.get('minutes_read') is None:
+            return JsonResponse({'error': 'Missing minutes_read'}, status=400)
+
+        if body.get('date') is None:
+            return JsonResponse({'error': 'Missing date'}, status=400)
+
+        session = ReadingSession.objects.create(
             reading_id=body['reading'],
             pages_read=body['pages_read'],
-            minutes_read=body['minutes_read']
+            minutes_read=body['minutes_read'],
+            date=body['date']
         )
 
-        return JsonResponse({'id': reading.id}, status=201)
+        return JsonResponse({'id': session.id}, status=201)
 
     return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
 
 @csrf_exempt
 def reading_session_by_id(request, id):
     try:
-        reading_session = Reading.objects.get(id=id)
+        session = ReadingSession.objects.get(id=id)
     except ReadingSession.DoesNotExist:
         return JsonResponse({'error': 'Not found'}, status=404)
 
     if request.method == 'GET':
         return JsonResponse({
-            'id': reading_session.id,
-            'book': reading_session.book.title,
-            'status': reading_session.status
+            'id': session.id,
+            'reading': session.reading.id,
+            'pages_read': session.pages_read,
+            'minutes_read': session.minutes_read
         })
 
+    elif request.method == 'DELETE':
+        session.delete()
+        return JsonResponse({'deleted': True})
+
     return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
-
-
 
