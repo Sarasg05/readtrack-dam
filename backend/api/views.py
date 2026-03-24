@@ -25,7 +25,10 @@ def books(request):
         return JsonResponse(response, safe=False)
 
     elif request.method == 'POST':
-        body = json.loads(request.body)
+        try:
+            body = json.loads(request.body)
+        except:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
         if body.get('title') is None:
             return JsonResponse({'error': 'Missing title'}, status=400)
@@ -65,7 +68,10 @@ def book_by_id(request, id):
         })
 
     elif request.method == 'PUT':
-        body = json.loads(request.body)
+        try:
+            body = json.loads(request.body)
+        except:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
         book.title = body.get('title',book.title)
         book.total_pages = body.get('total_pages', book.total_pages)
@@ -100,7 +106,10 @@ def annual_goals(request):
         return JsonResponse(response, safe=False)
 
     elif request.method == 'POST':
-        body = json.loads(request.body)
+        try:
+            body = json.loads(request.body)
+        except:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
         if body.get('user') is None:
             return JsonResponse({'error': 'Missing user'}, status=400)
@@ -136,7 +145,10 @@ def annual_goal_by_id(request, id):
         })
 
     elif request.method == 'PUT':
-        body = json.loads(request.body)
+        try:
+            body = json.loads(request.body)
+        except:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
         annual_goal.year = body.get('year', annual_goal.year)
         annual_goal.target_books = body.get('target_books', annual_goal.target_books)
@@ -230,8 +242,10 @@ def readings(request):
         return JsonResponse(response, safe=False)
 
     elif request.method == 'POST':
-
-        body = json.loads(request.body)
+        try:
+            body = json.loads(request.body)
+        except:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
         if body.get('user') is None:
             return JsonResponse({'error': 'Missing user'}, status=400)
@@ -271,7 +285,10 @@ def reading_by_id(request, id):
         })
 
     elif request.method == 'PUT':
-        body = json.loads(request.body)
+        try:
+            body = json.loads(request.body)
+        except:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
         reading.status = body.get('status', reading.status)
         reading.save()
@@ -302,7 +319,10 @@ def reading_sessions(request):
         return JsonResponse(response, safe=False)
 
     elif request.method == 'POST':
-        body = json.loads(request.body)
+        try:
+            body = json.loads(request.body)
+        except:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
         if body.get('reading') is None:
             return JsonResponse({'error': 'Missing reading'}, status=400)
