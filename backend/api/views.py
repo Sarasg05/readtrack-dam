@@ -93,6 +93,63 @@ class AnnualGoalViewSet(viewsets.ModelViewSet):
         user = self.request.user
         return AnnualGoal.objects.filter(user=user)
 
+@csrf_exempt
+def annual_goals(request):
+    if request.method == 'GET':
+        user_id = request.GET.get('user', None)
+
+        readings = AnnualGoal.objects.all()
+        if user_id:
+            annual_goals = readings.filter(user_id=user_id)
+
+        response = []
+        for a in annual_goals:
+            response.append([{
+                'id': a.id,
+                'year': a.year,
+                'target_books': a.target_books
+            }])
+
+        return JsonResponse(response, safe=False)
+
+    elif request.method == 'POST':
+        body = json.loads(request.body)
+
+        annual_goal = AnnualGoal.objects.create(
+            user_id=body['user'],
+            year=body['year'],
+            target_books=body['target_books']
+        )
+
+        return JsonResponse({'id': annual_goal.id}, status=201)
+
+    return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
+
+@csrf_exempt
+def annual_goal_by_id(request, id):
+    try:
+        annual_goal = AnnualGoal.objects.get(id=id)
+    except AnnualGoal.DoesNotExist:
+        return JsonResponse({'error': 'Not found'}, status=404)
+
+    if request.method == 'GET':
+        return JsonResponse({
+            'id': annual_goal.id,
+            'year': annual_goal.year,
+            'target_books': annual_goal.target_books
+        })
+
+    elif request.method == 'PUT':
+        body = json.loads(request.body)
+
+        annual_goal.year = body.get('year', annual_goal.year)
+        annual_goal.target_books = body.get('target_books', annual_goal.target_books)
+        annual_goal.save()
+
+        return JsonResponse({'updated': True})
+
+    return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
+
 class AuthorViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Author.objects.all()
@@ -102,8 +159,6 @@ class GenreViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-
-
 
 @csrf_exempt
 def readings(request):
