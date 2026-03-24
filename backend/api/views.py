@@ -15,10 +15,74 @@ from .serializers import (
     ReadingSessionSerializer
 )
 
-class BookViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
+
+@csrf_exempt
+def books(request):
+
+    if request.method == 'GET':
+        books = Book.objects.all()
+
+        response = []
+        for b in books:
+            response.append({
+                'id': b.id,
+                'title': b.title,
+                'author': b.author.name,
+                'total_pages': b.total_pages,
+                'synopsis': b.synopsis,
+                'genres': [g.name for g in b.genres.all()]
+            })
+
+        return JsonResponse(response, safe=False)
+
+    elif request.method == 'POST':
+        body = json.loads(request.body)
+
+        if body.get('title') is None:
+            return JsonResponse({'error': 'Missing title'}, status=400)
+
+        book = Book.objects.create(
+            title=body['title'],
+            author_id=body['author'],
+            total_pages=body['total_pages'],
+            synopsis=body.get('synopsis', '')
+        )
+
+        book.genres.set(body.get('genres', []))
+
+        return JsonResponse({'id': book.id}, status=201)
+
+    return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
+
+@csrf_exempt
+def book_by_id(request, id):
+    try:
+        book = Book.objects.get(id=id)
+    except Book.DoesNotExist:
+        return JsonResponse({'error': 'Not found'}, status=404)
+
+    if request.method == 'GET':
+        return JsonResponse({
+            'id': book.id,
+            'title': book.title,
+            'author': book.author.name,
+            'genres': [g.name for g in book.genres.all()]
+        })
+
+    elif request.method == 'PUT':
+        body = json.loads(request.body)
+
+        book.title = body.get('title',book.title)
+        book.total_pages = body.get('total_pages', book.total_pages)
+        book.save()
+
+        return JsonResponse({'updated': True})
+
+    elif request.method == 'DELETE':
+        book.delete()
+        return JsonResponse({'deleted': True})
+
+    return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
 
 class AnnualGoalViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
