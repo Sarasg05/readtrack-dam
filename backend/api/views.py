@@ -18,7 +18,6 @@ from .serializers import (
 
 @csrf_exempt
 def books(request):
-
     if request.method == 'GET':
         books = Book.objects.all()
 
@@ -172,10 +171,36 @@ def author_by_id(request, id):
 
     return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
 
-class GenreViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = Genre.objects.all()
-    serializer_class = GenreSerializer
+@csrf_exempt
+def genres(request):
+    if request.method == 'GET':
+        genres = Genre.objects.all()
+
+        response = []
+        for g in genres:
+            response.append({
+                'id': g.id,
+                'name': g.name,
+            })
+
+        return JsonResponse(response, safe=False)
+
+    return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
+
+@csrf_exempt
+def genre_by_id(request, id):
+    try:
+        genre = Genre.objects.get(id=id)
+    except Genre.DoesNotExist:
+        return JsonResponse({'error': 'Not found'}, status=404)
+
+    if request.method == 'GET':
+        return JsonResponse({
+            'id': genre.id,
+            'name': genre.name
+        })
+
+    return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
 
 @csrf_exempt
 def readings(request):
