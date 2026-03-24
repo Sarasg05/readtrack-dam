@@ -11,7 +11,8 @@ from .views import (
     genre_by_id,
     readings,
     reading_by_id,
-    ReadingSessionViewSet,
+    reading_sessions,
+    reading_session_by_id
 )
 
 
@@ -31,4 +32,7 @@ urlpatterns = [
 
     path('readings/', readings),
     path('readings/<int:id>/', reading_by_id),
+
+    path('reading_sessions/', reading_sessions),
+    path('reading_sessions/<int:id>/', reading_session_by_id),
 ]

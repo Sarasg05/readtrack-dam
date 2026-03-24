@@ -264,13 +264,55 @@ def reading_by_id(request, id):
 
     return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
 
-class ReadingSessionViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = ReadingSession.objects.all()
-    serializer_class = ReadingSessionSerializer
+@csrf_exempt
+def reading_sessions(request):
+    if request.method == 'GET':
+        user_id = request.GET.get('user', None)
 
-    def get_queryset(self):
-        return ReadingSession.objects.filter(reading__user=self.request.user)
+        reading_sessions = ReadingSession.objects.all()
+        if user_id:
+            reading_sessions = reading_sessions.filter(user_id=user_id)
+
+        response = []
+        for s in reading_sessions:
+            response.append({
+                'id': s.id,
+                'reading': [r.id for r in s.readings.all()],
+                'pages_read': s.pages_read,
+                'minutes_read': s.minutes_read
+            })
+
+        return JsonResponse(response, safe=False)
+
+    elif request.method == 'POST':
+        body = json.loads(request.body)
+
+        reading = Reading.objects.create(
+            user_id=body['user'],
+            reading_id=body['reading'],
+            pages_read=body['pages_read'],
+            minutes_read=body['minutes_read']
+        )
+
+        return JsonResponse({'id': reading.id}, status=201)
+
+    return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
+
+@csrf_exempt
+def reading_session_by_id(request, id):
+    try:
+        reading_session = Reading.objects.get(id=id)
+    except ReadingSession.DoesNotExist:
+        return JsonResponse({'error': 'Not found'}, status=404)
+
+    if request.method == 'GET':
+        return JsonResponse({
+            'id': reading_session.id,
+            'book': reading_session.book.title,
+            'status': reading_session.status
+        })
+
+    return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
 
 
 
