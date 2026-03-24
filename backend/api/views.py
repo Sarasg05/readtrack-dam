@@ -84,21 +84,12 @@ def book_by_id(request, id):
 
     return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
 
-class AnnualGoalViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = AnnualGoal.objects.all()
-    serializer_class = AnnualGoalSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-        return AnnualGoal.objects.filter(user=user)
-
 @csrf_exempt
 def annual_goals(request):
     if request.method == 'GET':
         user_id = request.GET.get('user', None)
 
-        readings = AnnualGoal.objects.all()
+        annual_goals = AnnualGoal.objects.all()
         if user_id:
             annual_goals = readings.filter(user_id=user_id)
 
@@ -150,10 +141,36 @@ def annual_goal_by_id(request, id):
 
     return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
 
-class AuthorViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
+@csrf_exempt
+def authors(request):
+    if request.method == 'GET':
+        authors = Author.objects.all()
+
+        response = []
+        for a in authors:
+            response.append({
+                'id': a.id,
+                'name': a.name,
+            })
+
+        return JsonResponse(response, safe=False)
+
+    return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
+
+@csrf_exempt
+def author_by_id(request, id):
+    try:
+        author = Author.objects.get(id=id)
+    except Author.DoesNotExist:
+        return JsonResponse({'error': 'Not found'}, status=404)
+
+    if request.method == 'GET':
+        return JsonResponse({
+            'id': author.id,
+            'name': author.name
+        })
+
+    return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
 
 class GenreViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
