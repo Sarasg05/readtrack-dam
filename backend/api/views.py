@@ -2,8 +2,61 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate
+
 from .models import AnnualGoal, Author, Genre, Book, Reading, ReadingSession
 
+
+@csrf_exempt
+def register(request):
+    if request.method == 'POST':
+        try:
+            body = json.loads(request.body)
+        except:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+        if not body.get('username'):
+            return JsonResponse({'error': 'Missing username'}, status=400)
+
+        if not body.get('password'):
+            return JsonResponse({'error': 'Missing password'}, status=400)
+
+        if User.objects.filter(username=body['username']).exists():
+            return JsonResponse({'error': 'User already exists'}, status=400)
+
+        user = User.objects.create(
+            username=body['username'],
+            password=make_password(body['password'])
+        )
+
+        return JsonResponse({'id': user.id}, status=201)
+
+    return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
+
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        try:
+            body = json.loads(request.body)
+        except:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+        user = authenticate(
+            username=body.get('username'),
+            password=body.get('password')
+        )
+
+        if user is None:
+            return JsonResponse({'error': 'Invalid credentials'}, status=401)
+
+        return JsonResponse({
+            'message': 'Login successful',
+            'user_id': user.id
+        })
+
+    return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
 
 @csrf_exempt
 def books(request):
