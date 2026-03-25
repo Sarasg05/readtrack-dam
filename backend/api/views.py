@@ -2,6 +2,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
@@ -68,7 +70,10 @@ def books(request):
             response.append({
                 'id': b.id,
                 'title': b.title,
-                'author': b.author.name,
+                'author': {
+                    'id': b.author.id,
+                    'name': b.author.name
+                },
                 'total_pages': b.total_pages,
                 'synopsis': b.synopsis,
                 'genres': [g.name for g in b.genres.all()]
@@ -398,11 +403,13 @@ def reading_sessions(request):
         if not body.get('date'):
             return JsonResponse({'error': 'Missing date'}, status=400)
 
+        date = datetime.fromisoformat(body['date']).date()
+
         session = ReadingSession.objects.create(
             reading_id=body['reading'],
-            pages_read=body.get('pages_read', 0),
-            minutes_read=body.get('minutes_read', 0),
-            date=body['date']
+            pages_read=body['pages_read'],
+            minutes_read=body['minutes_read'],
+            date=date
         )
 
         return JsonResponse({'id': session.id}, status=201)
