@@ -5,7 +5,6 @@ import json
 from .models import AnnualGoal, Author, Genre, Book, Reading, ReadingSession
 
 
-
 @csrf_exempt
 def books(request):
     if request.method == 'GET':
@@ -30,13 +29,13 @@ def books(request):
         except:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-        if body.get('title') is None:
+        if not body.get('title'):
             return JsonResponse({'error': 'Missing title'}, status=400)
 
-        if body.get('author') is None:
+        if not body.get('author'):
             return JsonResponse({'error': 'Missing author'}, status=400)
 
-        if body.get('total_pages') is None:
+        if not body.get('total_pages'):
             return JsonResponse({'error': 'Missing total_pages'}, status=400)
 
         book = Book.objects.create(
@@ -111,13 +110,13 @@ def annual_goals(request):
         except:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-        if body.get('user') is None:
+        if not body.get('user'):
             return JsonResponse({'error': 'Missing user'}, status=400)
 
-        if body.get('year') is None:
+        if not body.get('year'):
             return JsonResponse({'error': 'Missing year'}, status=400)
 
-        if body.get('target_books') is None:
+        if not body.get('target_books'):
             return JsonResponse({'error': 'Missing target_books'}, status=400)
 
         annual_goal = AnnualGoal.objects.create(
@@ -247,13 +246,13 @@ def readings(request):
         except:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-        if body.get('user') is None:
+        if not body.get('user'):
             return JsonResponse({'error': 'Missing user'}, status=400)
 
-        if body.get('book') is None:
+        if not body.get('book'):
             return JsonResponse({'error': 'Missing book'}, status=400)
 
-        if body.get('status') is None:
+        if not body.get('status'):
             return JsonResponse({'error': 'Missing status'}, status=400)
 
         reading = Reading.objects.create(
@@ -324,16 +323,16 @@ def reading_sessions(request):
         except:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-        if body.get('reading') is None:
+        if not body.get('reading'):
             return JsonResponse({'error': 'Missing reading'}, status=400)
 
-        if body.get('pages_read') is None:
+        if not body.get('pages_read'):
             return JsonResponse({'error': 'Missing pages_read'}, status=400)
 
-        if body.get('minutes_read') is None:
+        if not body.get('minutes_read'):
             return JsonResponse({'error': 'Missing minutes_read'}, status=400)
 
-        if body.get('date') is None:
+        if not body.get('date'):
             return JsonResponse({'error': 'Missing date'}, status=400)
 
         session = ReadingSession.objects.create(
