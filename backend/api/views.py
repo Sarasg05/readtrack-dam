@@ -45,7 +45,8 @@ def books(request):
             synopsis=body.get('synopsis', '')
         )
 
-        book.genres.set(body.get('genres', []))
+        if 'genres' in body:
+            book.genres.set(body['genres'])
 
         return JsonResponse({'id': book.id}, status=201)
 
@@ -72,8 +73,12 @@ def book_by_id(request, id):
         except:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-        book.title = body.get('title',book.title)
-        book.total_pages = body.get('total_pages', book.total_pages)
+        if 'title' in body:
+            book.title = body['title']
+
+        if 'total_pages' in body:
+            book.total_pages = body['total_pages']
+
         book.save()
 
         return JsonResponse({'updated': True})
@@ -149,8 +154,12 @@ def annual_goal_by_id(request, id):
         except:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-        annual_goal.year = body.get('year', annual_goal.year)
-        annual_goal.target_books = body.get('target_books', annual_goal.target_books)
+        if 'year' in body:
+            annual_goal.year = body['year']
+
+        if 'target_books' in body:
+            annual_goal.target_books = body['target_books']
+
         annual_goal.save()
 
         return JsonResponse({'updated': True})
@@ -289,7 +298,8 @@ def reading_by_id(request, id):
         except:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-        reading.status = body.get('status', reading.status)
+        if 'status' in body:
+            reading.status = body['status']
         reading.save()
 
         return JsonResponse({'updated': True})
@@ -337,8 +347,8 @@ def reading_sessions(request):
 
         session = ReadingSession.objects.create(
             reading_id=body['reading'],
-            pages_read=body['pages_read'],
-            minutes_read=body['minutes_read'],
+            pages_read=body.get('pages_read', 0),
+            minutes_read=body.get('minutes_read', 0),
             date=body['date']
         )
 
