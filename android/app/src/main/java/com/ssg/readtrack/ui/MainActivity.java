@@ -8,8 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ssg.readtrack.R;
+import com.ssg.readtrack.adapter.BookAdapter;
 import com.ssg.readtrack.model.Book;
 import com.ssg.readtrack.network.ApiService;
 import com.ssg.readtrack.network.RetrofitClient;
@@ -28,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        RecyclerView recyclerView = findViewById(R.id.recyclerBooks);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
 
         Call<List<Book>> call = apiService.getBooks();
@@ -38,11 +44,10 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Book> books = response.body();
 
-                    for (Book b : books) {
-                        Log.d("API", b.title);
-                    }
-                } else {
-                    Log.e("API", "Respuesta vacía o error");
+                    BookAdapter adapter = new BookAdapter(books);
+                    recyclerView.setAdapter(adapter);
+                }else{
+                    Log.e("API", "Respuesta no válida");
                 }
             }
 
