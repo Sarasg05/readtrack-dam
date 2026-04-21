@@ -23,17 +23,12 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_detail);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-        title = findViewById(R.id.txtTitle);
-        author = findViewById(R.id.txtAuthor);
-        total_pages = findViewById(R.id.txtTotalPages);
-        genres = findViewById(R.id.txtGenres);
-        image = findViewById(R.id.imgBook);
+        title = findViewById(R.id.txtTitleDetail);
+        author = findViewById(R.id.txtAuthorDetail);
+        total_pages = findViewById(R.id.txtTotalPagesDetail);
+        genres = findViewById(R.id.txtGenresDetail);
+        image = findViewById(R.id.imgBookDetail);
 
         // Recibir datos
         String t = getIntent().getStringExtra("title");
