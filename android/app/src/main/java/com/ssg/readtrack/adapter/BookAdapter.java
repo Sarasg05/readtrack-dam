@@ -3,6 +3,7 @@ package com.ssg.readtrack.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,10 +16,17 @@ import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
-    private List<Book> books;
+    public interface OnItemClickListener{
+        void onItemClick(Book book);
+    }
 
-    public BookAdapter(List<Book> books){
+    private List<Book> books;
+    private OnItemClickListener listener;
+
+    public BookAdapter(List<Book> books, OnItemClickListener listener){
+
         this.books = books;
+        this.listener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -36,7 +44,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int ViewType){
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_book, parent, false);
         return new ViewHolder(view);
@@ -53,6 +61,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             genre = book.genres.get(0);
         }
         holder.genres.setText(genre);
+
+        holder.itemView.setOnClickListener(v -> {
+            int pos = holder.getAdapterPosition();
+            if (listener != null && pos != RecyclerView.NO_POSITION) {
+                listener.onItemClick(books.get(pos));
+            }
+        });
     }
 
     @Override

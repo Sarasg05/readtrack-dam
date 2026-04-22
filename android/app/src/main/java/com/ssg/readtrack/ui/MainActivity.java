@@ -1,5 +1,6 @@
 package com.ssg.readtrack.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -44,7 +45,19 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Book> books = response.body();
 
-                    BookAdapter adapter = new BookAdapter(books);
+                    BookAdapter adapter = new BookAdapter(books, book -> {
+                        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+
+                        intent.putExtra("title", book.title);
+                        intent.putExtra("author", book.author);
+                        intent.putExtra("pages", String.valueOf(book.total_pages));
+
+                        if (book.genres != null && !book.genres.isEmpty()) {
+                            intent.putExtra("genres", book.genres.get(0));
+                        }
+
+                        startActivity(intent);
+                    });
                     recyclerView.setAdapter(adapter);
                 }else{
                     Log.e("API", "Respuesta no válida");
