@@ -18,7 +18,8 @@ def books(request):
                 'author': b.author.name,
                 'total_pages': b.total_pages,
                 'synopsis': b.synopsis,
-                'genres': [g.name for g in b.genres.all()]
+                'genres': [g.name for g in b.genres.all()],
+                'cover': b.cover.url if b.cover else None
             })
 
         return JsonResponse(response, safe=False)
@@ -38,11 +39,15 @@ def books(request):
         if not body.get('total_pages'):
             return JsonResponse({'error': 'Missing total_pages'}, status=400)
 
+        if not body.get('cover'):
+            return JsonResponse({'error': 'Missing cover'}, status=400)
+
         book = Book.objects.create(
             title=body['title'],
             author_id=body['author'],
             total_pages=body['total_pages'],
-            synopsis=body.get('synopsis', '')
+            synopsis=body.get('synopsis', ''),
+            cover=body.get('cover', '')
         )
 
         if 'genres' in body:
@@ -64,7 +69,8 @@ def book_by_id(request, id):
             'id': book.id,
             'title': book.title,
             'author': book.author.name,
-            'genres': [g.name for g in book.genres.all()]
+            'genres': [g.name for g in book.genres.all()],
+            'cover': b.cover.url if b.cover else None
         })
 
     elif request.method == 'PUT':

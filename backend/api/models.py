@@ -31,6 +31,8 @@ class Book(models.Model):
     synopsis = models.TextField(blank=True)
     genres = models.ManyToManyField(Genre)
 
+    cover = models.URLField(blank=True)
+
     def __str__(self):
         return self.title
 
