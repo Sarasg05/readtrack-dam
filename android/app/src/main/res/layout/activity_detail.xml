@@ -41,4 +41,18 @@
         android:layout_height="wrap_content"
         android:text="Genres"/>
 
+    <Button
+        android:id="@+id/btnStartReading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Reading"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/btnCompleted"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mark as Completed"
+        android:layout_marginTop="8dp"/>
+
 </LinearLayout>
