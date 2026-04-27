@@ -1,0 +1,23 @@
+[
+  {
+    "title": "El Hobbit",
+    "author": "J.R.R. Tolkien",
+    "total_pages": 310,
+    "genres": ["Fantasy"],
+    "cover": "https://covers.openlibrary.org/b/id/6979861-L.jpg"
+  },
+  {
+    "title": "1984",
+    "author": "George Orwell",
+    "total_pages": 328,
+    "genres": ["Dystopia"],
+    "cover": "https://covers.openlibrary.org/b/id/7222246-L.jpg"
+  },
+  {
+    "title": "Dune",
+    "author": "Frank Herbert",
+    "total_pages": 412,
+    "genres": ["Science Fiction"],
+    "cover": "https://covers.openlibrary.org/b/id/8108691-L.jpg"
+  }
+]
