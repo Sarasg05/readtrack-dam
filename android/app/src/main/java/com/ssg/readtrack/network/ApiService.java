@@ -8,6 +8,6 @@ import retrofit2.http.GET;
 
 public interface ApiService {
 
-    @GET("book/")
+    @GET("books/")
     Call<List<Book>> getBooks();
 }

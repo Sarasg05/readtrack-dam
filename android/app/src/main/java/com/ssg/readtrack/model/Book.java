@@ -9,4 +9,5 @@ public class Book {
     public int total_pages;
     public String synopsis;
     public List<String> genres;
+    public String cover;
 }

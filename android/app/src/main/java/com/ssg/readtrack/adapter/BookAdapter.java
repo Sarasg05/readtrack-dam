@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.ssg.readtrack.R;
 import com.ssg.readtrack.model.Book;
 
@@ -55,7 +56,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         Book book = books.get(position);
         holder.title.setText(book.title);
         holder.author.setText(book.author);
-        holder.total_pages.setText(book.total_pages);
+        holder.total_pages.setText(String.valueOf(book.total_pages));
         String genre = "";
         if (book.genres != null && !book.genres.isEmpty()) {
             genre = book.genres.get(0);
@@ -68,6 +69,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                 listener.onItemClick(books.get(pos));
             }
         });
+
+        Glide.with(holder.itemView.getContext())
+                .load(book.cover)
+                .into(holder.image);
     }
 
     @Override

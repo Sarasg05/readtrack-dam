@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
                         intent.putExtra("title", book.title);
                         intent.putExtra("author", book.author);
-                        intent.putExtra("pages", String.valueOf(book.total_pages));
+                        intent.putExtra("total_pages", String.valueOf(book.total_pages));
+
+                        intent.putExtra("cover", book.cover);
 
                         if (book.genres != null && !book.genres.isEmpty()) {
                             intent.putExtra("genres", book.genres.get(0));
