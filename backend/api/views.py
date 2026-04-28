@@ -19,7 +19,7 @@ def books(request):
                 'total_pages': b.total_pages,
                 'synopsis': b.synopsis,
                 'genres': [g.name for g in b.genres.all()],
-                'cover': b.cover.url if b.cover else None
+                'cover': b.cover if b.cover else None
             })
 
         return JsonResponse(response, safe=False)
@@ -70,7 +70,7 @@ def book_by_id(request, id):
             'title': book.title,
             'author': book.author.name,
             'genres': [g.name for g in book.genres.all()],
-            'cover': b.cover.url if b.cover else None
+            'cover': book.cover if book.cover else None
         })
 
     elif request.method == 'PUT':
