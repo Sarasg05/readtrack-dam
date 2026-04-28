@@ -11,9 +11,9 @@ import retrofit2.http.POST;
 
 public interface ApiService {
 
-    @GET("books/")
+    @GET("api/books/")
     Call<List<Book>> getBooks();
 
-    @POST("readings/")
+    @POST("api/readings/")
     Call<Void> createReading(@Body ReadingRequest request);
 }
