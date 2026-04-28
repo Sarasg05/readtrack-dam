@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
                         intent.putExtra("cover", book.cover);
 
+                        intent.putExtra("book_id", book.id);
+
                         if (book.genres != null && !book.genres.isEmpty()) {
                             intent.putExtra("genres", book.genres.get(0));
                         }
