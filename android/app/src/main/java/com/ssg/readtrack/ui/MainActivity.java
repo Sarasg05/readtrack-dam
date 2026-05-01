@@ -33,14 +33,14 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        RecyclerView recyclerView = findViewById(R.id.recyclerBooks);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         Button btnMyReadings = findViewById(R.id.btnMyReadings);
 
         btnMyReadings.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, MyReadingsActivity.class));
         });
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerBooks);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
 

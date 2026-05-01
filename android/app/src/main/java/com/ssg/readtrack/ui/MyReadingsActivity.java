@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ssg.readtrack.R;
+import com.ssg.readtrack.adapter.ReadingAdapter;
 import com.ssg.readtrack.model.Reading;
 import com.ssg.readtrack.network.ApiService;
 import com.ssg.readtrack.network.RetrofitClient;
