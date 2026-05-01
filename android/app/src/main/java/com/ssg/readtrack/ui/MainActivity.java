@@ -3,6 +3,7 @@ package com.ssg.readtrack.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        Button btnMyReadings = findViewById(R.id.btnMyReadings);
+
+        btnMyReadings.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, MyReadingsActivity.class));
+        });
 
         RecyclerView recyclerView = findViewById(R.id.recyclerBooks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
