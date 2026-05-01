@@ -83,6 +83,31 @@ public class DetailActivity extends AppCompatActivity {
             });
         });
 
+        Button btnCompleted = findViewById(R.id.btnCompleted);
+
+        btnCompleted.setOnClickListener(v -> {
+            if (bookId == -1) {
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ApiService api = RetrofitClient.getClient().create(ApiService.class);
+
+            ReadingRequest req = new ReadingRequest(1, bookId, "completed");
+
+            api.createReading(req).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    Toast.makeText(DetailActivity.this, "Marked as completed", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(DetailActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+
 
     }
 }
