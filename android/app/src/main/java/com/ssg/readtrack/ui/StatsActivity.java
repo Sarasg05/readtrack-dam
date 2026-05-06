@@ -1,6 +1,8 @@
 package com.ssg.readtrack.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.ssg.readtrack.R;
+import com.ssg.readtrack.model.StatsResponse;
+import com.ssg.readtrack.network.ApiService;
+import com.ssg.readtrack.network.RetrofitClient;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class StatsActivity extends AppCompatActivity {
 
