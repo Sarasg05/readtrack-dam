@@ -1,5 +1,6 @@
 package com.ssg.readtrack.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -68,12 +69,24 @@ public class DetailActivity extends AppCompatActivity {
 
             ApiService api = RetrofitClient.getClient().create(ApiService.class);
 
-            ReadingRequest req = new ReadingRequest(1, bookId, "reading");
+            SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
+            String token = prefs.getString("token", "");
 
-            api.createReading(req).enqueue(new Callback<Void>() {
+            if (token.isEmpty()) {
+                Toast.makeText(this, "Session expired", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ReadingRequest req = new ReadingRequest(bookId, "reading");
+
+            api.createReading(token, req).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
-                    Toast.makeText(DetailActivity.this, "Started reading", Toast.LENGTH_SHORT).show();
+                    if (response.isSuccessful()) {
+                        Toast.makeText(DetailActivity.this, "Started reading", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(DetailActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
@@ -93,9 +106,17 @@ public class DetailActivity extends AppCompatActivity {
 
             ApiService api = RetrofitClient.getClient().create(ApiService.class);
 
-            ReadingRequest req = new ReadingRequest(1, bookId, "completed");
+            SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
+            String token = prefs.getString("token", "");
 
-            api.createReading(req).enqueue(new Callback<Void>() {
+            if (token.isEmpty()) {
+                Toast.makeText(this, "Session expired", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ReadingRequest req = new ReadingRequest(bookId, "completed");
+
+            api.createReading(token, req).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     Toast.makeText(DetailActivity.this, "Marked as completed", Toast.LENGTH_SHORT).show();
@@ -107,7 +128,5 @@ public class DetailActivity extends AppCompatActivity {
                 }
             });
         });
-
-
     }
 }
