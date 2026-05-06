@@ -10,6 +10,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -22,7 +23,7 @@ public interface ApiService {
     Call<Void> createReading(@Body ReadingRequest request);
 
     @GET("api/readings/")
-    Call<List<Reading>> getReadings(@Query("user") int userId);
+    Call<List<Reading>> getReadings(@Header("Authorization") String token);
 
     @POST("api/login/")
     Call<LoginResponse> login(@Body LoginRequest request);

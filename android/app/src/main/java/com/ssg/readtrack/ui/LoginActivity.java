@@ -57,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
 
                         String token = response.body().token;
 
-                        // 🔥 PASO CLAVE: guardar token
                         SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
                         prefs.edit().putString("token", token).apply();
 
