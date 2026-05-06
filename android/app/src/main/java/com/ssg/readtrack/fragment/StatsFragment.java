@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.ssg.readtrack.R;
 
-public class SearchFragment extends Fragment {
+public class StatsFragment extends Fragment {
 
     @Nullable
     @Override
