@@ -20,7 +20,10 @@ public interface ApiService {
     Call<List<Book>> getBooks();
 
     @POST("api/readings/")
-    Call<Void> createReading(@Body ReadingRequest request);
+    Call<Void> createReading(
+            @Header("Authorization") String token,
+            @Body ReadingRequest request
+    );
 
     @GET("api/readings/")
     Call<List<Reading>> getReadings(@Header("Authorization") String token);
