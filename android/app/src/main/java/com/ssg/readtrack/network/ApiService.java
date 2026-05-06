@@ -1,5 +1,7 @@
 package com.ssg.readtrack.network;
 import com.ssg.readtrack.model.Book;
+import com.ssg.readtrack.model.LoginRequest;
+import com.ssg.readtrack.model.LoginResponse;
 import com.ssg.readtrack.model.Reading;
 import com.ssg.readtrack.model.ReadingRequest;
 
@@ -21,4 +23,7 @@ public interface ApiService {
 
     @GET("api/readings/")
     Call<List<Reading>> getReadings(@Query("user") int userId);
+
+    @POST("api/login/")
+    Call<LoginResponse> login(@Body LoginRequest request);
 }
