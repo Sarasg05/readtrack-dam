@@ -362,8 +362,6 @@ def readings(request):
             'created': created
         }, status=201)
 
-        return JsonResponse({'id': reading.id}, status=201)
-
     return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
 
 @csrf_exempt
@@ -487,4 +485,35 @@ def reading_session_by_id(request, id):
         return JsonResponse({'deleted': True})
 
     return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
+
+@csrf_exempt
+def stats(request):
+    user = get_user_from_token(request)
+
+    if not user:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    year = datetime.date.today().year
+
+    # Libros completados este año
+    completed = Reading.objects.filter(
+        user=user,
+        status='completed',
+        end_date__year=year
+    )
+
+    # Sesiones de lectura
+    sessions = ReadingSession.objects.filter(
+        reading__user=user,
+        date__year=year
+    )
+
+    books_read = completed.count()
+    pages_read = sum(s.pages_read for s in sessions)
+
+    return JsonResponse({
+        'year': year,
+        'books_read': books_read,
+        'pages_read': pages_read
+    })
 
