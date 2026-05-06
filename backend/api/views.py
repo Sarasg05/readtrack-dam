@@ -7,6 +7,7 @@ from .models import AnnualGoal, Author, Genre, Book, Reading, ReadingSession
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 import uuid
+import datetime
 
 
 TOKENS = {}
@@ -340,15 +341,26 @@ def readings(request):
         if not body.get('status'):
             return JsonResponse({'error': 'Missing status'}, status=400)
 
-        reading = Reading.objects.create(
-
+        reading, created = Reading.objects.get_or_create(
             user=user,
-
             book_id=body['book'],
-
-            status=body['status']
-
+            defaults={
+                'status': body['status']
+            }
         )
+
+        if not created:
+            reading.status = body['status']
+
+            if body['status'] == 'completed':
+                reading.end_date = datetime.date.today()
+
+            reading.save()
+
+        return JsonResponse({
+            'id': reading.id,
+            'created': created
+        }, status=201)
 
         return JsonResponse({'id': reading.id}, status=201)
 
