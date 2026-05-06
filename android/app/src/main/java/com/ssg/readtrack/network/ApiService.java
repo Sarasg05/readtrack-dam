@@ -4,6 +4,7 @@ import com.ssg.readtrack.model.LoginRequest;
 import com.ssg.readtrack.model.LoginResponse;
 import com.ssg.readtrack.model.Reading;
 import com.ssg.readtrack.model.ReadingRequest;
+import com.ssg.readtrack.model.StatsResponse;
 
 import java.util.List;
 
@@ -30,4 +31,7 @@ public interface ApiService {
 
     @POST("api/login/")
     Call<LoginResponse> login(@Body LoginRequest request);
+
+    @GET("api/stats/")
+    Call<StatsResponse> getStats(@Header("Authorization") String token);
 }
