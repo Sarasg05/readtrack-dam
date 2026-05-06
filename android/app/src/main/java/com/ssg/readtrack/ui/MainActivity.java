@@ -86,5 +86,11 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Button btnStats = findViewById(R.id.btnStats);
+
+        btnStats.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, StatsActivity.class));
+        });
     }
 }
