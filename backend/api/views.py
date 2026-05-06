@@ -4,6 +4,64 @@ import json
 
 from .models import AnnualGoal, Author, Genre, Book, Reading, ReadingSession
 
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+import uuid
+
+
+TOKENS = {}
+
+@csrf_exempt
+def register(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST'}, status=405)
+
+    body = json.loads(request.body)
+
+    username = body.get('username')
+    password = body.get('password')
+
+    if not username or not password:
+        return JsonResponse({'error': 'Missing fields'}, status=400)
+
+    if User.objects.filter(username=username).exists():
+        return JsonResponse({'error': 'User exists'}, status=400)
+
+    user = User.objects.create_user(username=username, password=password)
+
+    return JsonResponse({'message': 'User created'})
+
+@csrf_exempt
+def login(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST'}, status=405)
+
+    body = json.loads(request.body)
+
+    user = authenticate(
+        username=body.get('username'),
+        password=body.get('password')
+    )
+
+    if user is None:
+        return JsonResponse({'error': 'Invalid credentials'}, status=401)
+
+    token = str(uuid.uuid4())
+    TOKENS[token] = user.id
+
+    return JsonResponse({'token': token})
+
+def get_user_from_token(request):
+    token = request.headers.get('Authorization')
+
+    if not token:
+        return None
+
+    user_id = TOKENS.get(token)
+    if not user_id:
+        return None
+
+    return User.objects.get(id=user_id)
 
 @csrf_exempt
 def books(request):
@@ -15,7 +73,10 @@ def books(request):
             response.append({
                 'id': b.id,
                 'title': b.title,
-                'author': b.author.name,
+                'author': {
+                    'id': b.author.id,
+                    'name': b.author.name
+                },
                 'total_pages': b.total_pages,
                 'synopsis': b.synopsis,
                 'genres': [g.name for g in b.genres.all()],
@@ -68,7 +129,10 @@ def book_by_id(request, id):
         return JsonResponse({
             'id': book.id,
             'title': book.title,
-            'author': book.author.name,
+            'author': {
+                'id': book.author.id,
+                'name': book.author.name
+            },
             'genres': [g.name for g in book.genres.all()],
             'cover': book.cover if book.cover else None
         })
@@ -97,12 +161,14 @@ def book_by_id(request, id):
 
 @csrf_exempt
 def annual_goals(request):
-    if request.method == 'GET':
-        user_id = request.GET.get('user', None)
+    user = get_user_from_token(request)
 
-        annual_goals = AnnualGoal.objects.all()
-        if user_id:
-            annual_goals = annual_goals.filter(user_id=user_id)
+    if not user:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    if request.method == 'GET':
+
+        annual_goals = AnnualGoal.objects.filter(user=user)
 
         response = []
         for a in annual_goals:
@@ -121,9 +187,6 @@ def annual_goals(request):
         except:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-        if not body.get('user'):
-            return JsonResponse({'error': 'Missing user'}, status=400)
-
         if not body.get('year'):
             return JsonResponse({'error': 'Missing year'}, status=400)
 
@@ -131,7 +194,7 @@ def annual_goals(request):
             return JsonResponse({'error': 'Missing target_books'}, status=400)
 
         annual_goal = AnnualGoal.objects.create(
-            user_id=body['user'],
+            user=user,
             year=body['year'],
             target_books=body['target_books']
         )
@@ -142,8 +205,13 @@ def annual_goals(request):
 
 @csrf_exempt
 def annual_goal_by_id(request, id):
+    user = get_user_from_token(request)
+
+    if not user:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
     try:
-        annual_goal = AnnualGoal.objects.get(id=id)
+        annual_goal = AnnualGoal.objects.get(id=id, user=user)
     except AnnualGoal.DoesNotExist:
         return JsonResponse({'error': 'Not found'}, status=404)
 
@@ -236,18 +304,23 @@ def genre_by_id(request, id):
 
 @csrf_exempt
 def readings(request):
-    if request.method == 'GET':
-        user_id = request.GET.get('user', None)
+    user = get_user_from_token(request)
 
-        readings = Reading.objects.all()
-        if user_id:
-            readings = readings.filter(user_id=user_id)
+    if not user:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    if request.method == 'GET':
+
+        readings = Reading.objects.filter(user=user)
 
         response = []
         for r in readings:
             response.append({
                 'id': r.id,
-                'book': r.book.title,
+                'book': {
+                    'id': r.book.id,
+                    'title': r.book.title
+                },
                 'status': r.status,
                 'start_date': r.start_date.isoformat() if r.start_date else None,
                 'end_date': r.end_date.isoformat() if r.end_date else None
@@ -261,9 +334,6 @@ def readings(request):
         except:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-        if not body.get('user'):
-            return JsonResponse({'error': 'Missing user'}, status=400)
-
         if not body.get('book'):
             return JsonResponse({'error': 'Missing book'}, status=400)
 
@@ -272,7 +342,7 @@ def readings(request):
 
         reading = Reading.objects.create(
 
-            user_id=body['user'],
+            user=user,
 
             book_id=body['book'],
 
@@ -286,15 +356,23 @@ def readings(request):
 
 @csrf_exempt
 def reading_by_id(request, id):
+    user = get_user_from_token(request)
+
+    if not user:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
     try:
-        reading = Reading.objects.get(id=id)
+        reading = Reading.objects.get(id=id, user=user)
     except Reading.DoesNotExist:
         return JsonResponse({'error': 'Not found'}, status=404)
 
     if request.method == 'GET':
         return JsonResponse({
             'id': reading.id,
-            'book': reading.book.title,
+            'book': {
+                'id': reading.book.id,
+                'title': reading.book.title
+            },
             'status': reading.status
         })
 
@@ -318,8 +396,13 @@ def reading_by_id(request, id):
 
 @csrf_exempt
 def reading_sessions(request):
+    user = get_user_from_token(request)
+
+    if not user:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
     if request.method == 'GET':
-        sessions = ReadingSession.objects.all()
+        sessions = ReadingSession.objects.filter(reading__user=user)
 
         response = []
         for s in sessions:
@@ -351,8 +434,13 @@ def reading_sessions(request):
         if not body.get('date'):
             return JsonResponse({'error': 'Missing date'}, status=400)
 
+        try:
+            reading = Reading.objects.get(id=body['reading'], user=user)
+        except Reading.DoesNotExist:
+            return JsonResponse({'error': 'Reading not found'}, status=404)
+
         session = ReadingSession.objects.create(
-            reading_id=body['reading'],
+            reading=reading,
             pages_read=body.get('pages_read', 0),
             minutes_read=body.get('minutes_read', 0),
             date=body['date']
@@ -364,8 +452,13 @@ def reading_sessions(request):
 
 @csrf_exempt
 def reading_session_by_id(request, id):
+    user = get_user_from_token(request)
+
+    if not user:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
     try:
-        session = ReadingSession.objects.get(id=id)
+        session = ReadingSession.objects.get(id=id, reading__user=user)
     except ReadingSession.DoesNotExist:
         return JsonResponse({'error': 'Not found'}, status=404)
 
