@@ -1,6 +1,7 @@
 package com.ssg.readtrack.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.ssg.readtrack.R;
 import com.ssg.readtrack.adapter.BookAdapter;
 import com.ssg.readtrack.model.Book;
+import com.ssg.readtrack.model.HomeResponse;
 import com.ssg.readtrack.network.ApiService;
 import com.ssg.readtrack.network.RetrofitClient;
 import com.ssg.readtrack.ui.DetailActivity;
@@ -53,6 +55,7 @@ public class HomeFragment extends Fragment {
         progressGoal.setProgress(35);
 
         loadBooks();
+        loadHome();
 
         return view;
     }
@@ -99,6 +102,47 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Book>> call, Throwable t) {
                 Log.e("API", t.getMessage());
+            }
+        });
+    }
+
+    private void loadHome() {
+
+        SharedPreferences prefs = requireActivity()
+                .getSharedPreferences("app", getContext().MODE_PRIVATE);
+
+        String token = prefs.getString("token", "");
+
+        ApiService api = RetrofitClient.getClient().create(ApiService.class);
+
+        api.getHome(token).enqueue(new Callback<HomeResponse>() {
+
+            @Override
+            public void onResponse(Call<HomeResponse> call, Response<HomeResponse> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+
+                    HomeResponse data = response.body();
+
+                    if (data.current_book != null) {
+                        txtCurrentBook.setText(data.current_book.title);
+                        txtCurrentPages.setText("Progress available");
+                    } else {
+                        txtCurrentBook.setText("No current book");
+                    }
+
+                    txtGoal.setText(data.books_read + " / " + data.goal);
+
+                    int progress = (data.goal == 0) ? 0 :
+                            (data.books_read * 100 / data.goal);
+
+                    progressGoal.setProgress(progress);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<HomeResponse> call, Throwable t) {
+
             }
         });
     }
