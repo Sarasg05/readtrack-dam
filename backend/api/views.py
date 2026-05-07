@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 import uuid
 import datetime
+from django.db.models import Sum
+from datetime import date
 
 
 TOKENS = {}
@@ -493,28 +495,38 @@ def stats(request):
     if not user:
         return JsonResponse({'error': 'Unauthorized'}, status=401)
 
-    year = datetime.date.today().year
+    current_year = date.today().year
 
-    # Libros completados este año
-    completed = Reading.objects.filter(
+    completed_readings = Reading.objects.filter(
         user=user,
         status='completed',
-        end_date__year=year
+        end_date__year=current_year
     )
 
-    # Sesiones de lectura
-    sessions = ReadingSession.objects.filter(
-        reading__user=user,
-        date__year=year
-    )
+    books_completed = completed_readings.count()
 
-    books_read = completed.count()
-    pages_read = sum(s.pages_read for s in sessions)
+    pages_read = 0
+
+    for r in completed_readings:
+        pages_read += r.book.total_pages
+
+    goal = AnnualGoal.objects.filter(
+        user=user,
+        year=current_year
+    ).first()
+
+    target_books = goal.target_books if goal else 0
+
+    progress = 0
+
+    if target_books > 0:
+        progress = int((books_completed / target_books) * 100)
 
     return JsonResponse({
-        'year': year,
-        'books_read': books_read,
-        'pages_read': pages_read
+        books_completed: books_completed,
+        pages_read: pages_read,
+        target_books: target_books,
+        progress: progress
     })
 
 @csrf_exempt
