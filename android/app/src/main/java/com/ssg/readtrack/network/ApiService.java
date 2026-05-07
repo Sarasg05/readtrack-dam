@@ -1,5 +1,6 @@
 package com.ssg.readtrack.network;
 import com.ssg.readtrack.model.Book;
+import com.ssg.readtrack.model.HomeResponse;
 import com.ssg.readtrack.model.LoginRequest;
 import com.ssg.readtrack.model.LoginResponse;
 import com.ssg.readtrack.model.Reading;
@@ -38,4 +39,7 @@ public interface ApiService {
 
     @GET("api/me/")
     Call<User> getMe(@Header("Authorization") String token);
+
+    @GET("api/home/")
+    Call<HomeResponse> getHome(@Header("Authorization") String token);
 }
