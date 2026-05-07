@@ -55,7 +55,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position){
         Book book = books.get(position);
         holder.title.setText(book.title);
-        holder.author.setText(book.author);
+        holder.author.setText(book.author.name);
         holder.total_pages.setText(String.valueOf(book.total_pages));
         String genre = "";
         if (book.genres != null && !book.genres.isEmpty()) {

@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment {
                         Intent intent = new Intent(getContext(), DetailActivity.class);
 
                         intent.putExtra("title", book.title);
-                        intent.putExtra("author", book.author);
+                        intent.putExtra("author", book.author.name);
                         intent.putExtra("total_pages", String.valueOf(book.total_pages));
                         intent.putExtra("cover", book.cover);
                         intent.putExtra("book_id", book.id);
