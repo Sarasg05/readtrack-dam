@@ -517,3 +517,16 @@ def stats(request):
         'pages_read': pages_read
     })
 
+@csrf_exempt
+def me(request):
+
+    user = get_user_from_token(request)
+
+    if not user:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    return JsonResponse({
+        'id': user.id,
+        'username': user.username
+    })
+
