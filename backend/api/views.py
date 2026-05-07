@@ -523,10 +523,10 @@ def stats(request):
         progress = int((books_completed / target_books) * 100)
 
     return JsonResponse({
-        books_completed: books_completed,
-        pages_read: pages_read,
-        target_books: target_books,
-        progress: progress
+        'books_completed': books_completed,
+        'pages_read': pages_read,
+        'target_books': target_books,
+        'progress': progress
     })
 
 @csrf_exempt
