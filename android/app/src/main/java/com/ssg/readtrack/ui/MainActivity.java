@@ -10,11 +10,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ssg.readtrack.R;
 import com.ssg.readtrack.adapter.BookAdapter;
+import com.ssg.readtrack.fragment.HomeFragment;
+import com.ssg.readtrack.fragment.ProfileFragment;
+import com.ssg.readtrack.fragment.SearchFragment;
+import com.ssg.readtrack.fragment.StatsFragment;
 import com.ssg.readtrack.model.Book;
 import com.ssg.readtrack.network.ApiService;
 import com.ssg.readtrack.network.RetrofitClient;
@@ -33,64 +39,35 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerBooks);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 
-        Button btnMyReadings = findViewById(R.id.btnMyReadings);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new HomeFragment())
+                .commit();
 
-        btnMyReadings.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, MyReadingsActivity.class));
-        });
+        bottomNav.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
 
-        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+            if (item.getItemId() == R.id.nav_home) {
+                selectedFragment = new HomeFragment();
 
-        Call<List<Book>> call = apiService.getBooks();
+            } else if (item.getItemId() == R.id.nav_search) {
+                selectedFragment = new SearchFragment();
 
-        call.enqueue(new Callback<List<Book>>() {
-            @Override
-            public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Book> books = response.body();
+            } else if (item.getItemId() == R.id.nav_stats) {
+                selectedFragment = new StatsFragment();
 
-                    BookAdapter adapter = new BookAdapter(books, book -> {
-                        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-
-                        intent.putExtra("title", book.title);
-                        intent.putExtra("author", book.author);
-                        intent.putExtra("total_pages", String.valueOf(book.total_pages));
-
-                        intent.putExtra("cover", book.cover);
-
-                        intent.putExtra("book_id", book.id);
-
-                        if (book.genres != null && !book.genres.isEmpty()) {
-                            intent.putExtra("genres", book.genres.get(0));
-                        }
-
-                        startActivity(intent);
-                    });
-                    recyclerView.setAdapter(adapter);
-                }else{
-                    Log.e("API", "Respuesta no válida");
-                }
+            } else if (item.getItemId() == R.id.nav_profile) {
+                selectedFragment = new ProfileFragment();
             }
 
-            @Override
-            public void onFailure(Call<List<Book>> call, Throwable t) {
-                Log.e("API", "Error: " + t.getMessage());
+            if (selectedFragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, selectedFragment)
+                        .commit();
             }
-        });
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        Button btnStats = findViewById(R.id.btnStats);
-
-        btnStats.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, StatsActivity.class));
+            return true;
         });
     }
 }
