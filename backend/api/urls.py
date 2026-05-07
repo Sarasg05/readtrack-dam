@@ -12,7 +12,8 @@ from .views import (
     reading_by_id,
     reading_sessions,
     reading_session_by_id,
-    stats
+    stats,
+    me
 )
 
 
@@ -36,5 +37,7 @@ urlpatterns = [
     path('reading_sessions/', reading_sessions),
     path('reading_sessions/<int:id>/', reading_session_by_id),
 
-    path('stats/', stats)
+    path('stats/', stats),
+
+    path('me/', me)
 ]
