@@ -13,7 +13,8 @@ from .views import (
     reading_sessions,
     reading_session_by_id,
     stats,
-    me
+    me,
+    home
 )
 
 
@@ -39,5 +40,7 @@ urlpatterns = [
 
     path('stats/', stats),
 
-    path('me/', me)
+    path('me/', me),
+
+    path('home/', home)
 ]
