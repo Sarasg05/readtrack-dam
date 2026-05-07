@@ -542,3 +542,37 @@ def me(request):
         'username': user.username
     })
 
+@csrf_exempt
+def home(request):
+    user = get_user_from_token(request)
+
+    if not user:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    # 1. libro en lectura
+    reading = Reading.objects.filter(user=user, status="reading").first()
+
+    current_book = None
+    if reading:
+        current_book = {
+            "title": reading.book.title,
+            "total_pages": reading.book.total_pages,
+        }
+
+    # 2. objetivo anual
+    from datetime import datetime
+    year = datetime.now().year
+
+    goal = AnnualGoal.objects.filter(user=user, year=year).first()
+
+    target = goal.target_books if goal else 0
+
+    # 3. libros completados
+    books_read = Reading.objects.filter(user=user, status="completed").count()
+
+    return JsonResponse({
+        "current_book": current_book,
+        "books_read": books_read,
+        "goal": target
+    })
+
