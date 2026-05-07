@@ -6,4 +6,9 @@ public class Reading {
     public String status;
     public String start_date;
     public String end_date;
+
+    public static class BookItem {
+        public int id;
+        public String title;
+    }
 }
