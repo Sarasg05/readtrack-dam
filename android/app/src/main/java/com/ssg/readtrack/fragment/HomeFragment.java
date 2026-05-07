@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.ssg.readtrack.R;
 import com.ssg.readtrack.adapter.BookAdapter;
@@ -30,13 +32,25 @@ public class HomeFragment extends Fragment {
 
     RecyclerView recyclerView;
 
+    TextView txtCurrentBook, txtCurrentPages, txtGoal;
+    ProgressBar progressGoal;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerBooks);
+        txtCurrentBook = view.findViewById(R.id.txtCurrentBook);
+        txtCurrentPages = view.findViewById(R.id.txtCurrentPages);
+        txtGoal = view.findViewById(R.id.txtGoal);
+        progressGoal = view.findViewById(R.id.progressGoal);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        txtCurrentBook.setText("The Hobbit");
+        txtCurrentPages.setText("120 / 310 pages");
+
+        txtGoal.setText("7 / 20 books");
+        progressGoal.setProgress(35);
 
         loadBooks();
 
