@@ -5,6 +5,7 @@ import com.ssg.readtrack.model.LoginRequest;
 import com.ssg.readtrack.model.LoginResponse;
 import com.ssg.readtrack.model.Reading;
 import com.ssg.readtrack.model.ReadingRequest;
+import com.ssg.readtrack.model.RegisterRequest;
 import com.ssg.readtrack.model.StatsResponse;
 import com.ssg.readtrack.model.User;
 
@@ -33,6 +34,9 @@ public interface ApiService {
 
     @POST("api/login/")
     Call<LoginResponse> login(@Body LoginRequest request);
+
+    @POST("api/register/")
+    Call<Void> register(@Body RegisterRequest request);
 
     @GET("api/stats/")
     Call<StatsResponse> getStats(@Header("Authorization") String token);
