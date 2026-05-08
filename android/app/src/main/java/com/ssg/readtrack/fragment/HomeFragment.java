@@ -20,6 +20,7 @@ import com.ssg.readtrack.R;
 import com.ssg.readtrack.adapter.BookAdapter;
 import com.ssg.readtrack.model.Book;
 import com.ssg.readtrack.model.HomeResponse;
+import com.ssg.readtrack.model.User;
 import com.ssg.readtrack.network.ApiService;
 import com.ssg.readtrack.network.RetrofitClient;
 import com.ssg.readtrack.ui.DetailActivity;
