@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -34,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText etUsername = findViewById(R.id.etUsername);
         EditText etPassword = findViewById(R.id.etPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
+        TextView txtRegister = findViewById(R.id.txtRegister);
 
         btnLogin.setOnClickListener(v -> {
 
@@ -60,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
                         prefs.edit().putString("token", token).apply();
 
-                        Toast.makeText(LoginActivity.this, "Login OK", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Welcome back!", Toast.LENGTH_SHORT).show();
 
                         Intent intent = new Intent(
                                 LoginActivity.this,
@@ -84,6 +86,16 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
+        });
+
+        txtRegister.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    LoginActivity.this,
+                    RegisterActivity.class
+            );
+
+            startActivity(intent);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

@@ -14,7 +14,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.ssg.readtrack.R;
-import com.ssg.readtrack.model.LoginResponse;
 import com.ssg.readtrack.model.RegisterRequest;
 import com.ssg.readtrack.network.ApiService;
 import com.ssg.readtrack.network.RetrofitClient;
@@ -51,33 +50,44 @@ public class RegisterActivity extends AppCompatActivity {
             RegisterRequest request = new RegisterRequest(username, password);
 
             api.register(request).enqueue(new Callback<Void>() {
+
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
 
                     if (response.isSuccessful()) {
 
-                        Toast.makeText(RegisterActivity.this, "User created", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(
+                                RegisterActivity.this,
+                                "User created successfully",
+                                Toast.LENGTH_SHORT
+                        ).show();
 
                         Intent intent = new Intent(
                                 RegisterActivity.this,
                                 LoginActivity.class
                         );
 
-                        intent.setFlags(
-                                Intent.FLAG_ACTIVITY_NEW_TASK |
-                                        Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        );
-
                         startActivity(intent);
+                        finish();
 
                     } else {
-                        Toast.makeText(RegisterActivity.this, "Error creating user", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(
+                                RegisterActivity.this,
+                                "Error: " + response.code(),
+                                Toast.LENGTH_LONG
+                        ).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(RegisterActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(
+                            RegisterActivity.this,
+                            "Error: " + t.getMessage(),
+                            Toast.LENGTH_LONG
+                    ).show();
                 }
             });
         });
