@@ -7,85 +7,127 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@color/bg">
 
         <LinearLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Continue Reading -->
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Continue Reading"
-                android:textSize="22sp"
-                android:textStyle="bold"/>
-
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card"
+                android:padding="20dp"
                 android:orientation="vertical"
-                android:padding="16dp"
-                android:background="#EEEEEE"
-                android:layout_marginTop="12dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/txtCurrentBook"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvHello"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No current book"
-                    android:textSize="20sp"
+                    android:text="Hola 👋"
+                    android:textSize="22sp"
+                    android:textColor="@color/text"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/txtCurrentPages"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvSubtitle"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0 / 0 pages"
-                    android:layout_marginTop="6dp"/>
+                    android:text="Sigues leyendo muy bien esta semana"
+                    android:textColor="@color/textSecondary"
+                    android:layout_marginTop="4dp"/>
+
+                <ProgressBar
+                    android:id="@+id/progressGoal"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="16dp"
+                    android:max="100"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_card"
+                android:padding="16dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Continue Reading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvCurrentBook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No book"
+                    android:textColor="@color/textSecondary"
+                    android:layout_marginTop="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvBooks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card"
+                    android:padding="12dp"
+                    android:text="Books: 0"
+                    android:textColor="@color/text"/>
+
+                <TextView
+                    android:id="@+id/tvPages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card"
+                    android:padding="12dp"
+                    android:text="Pages: 0"
+                    android:textColor="@color/text"/>
+
+                <TextView
+                    android:id="@+id/tvGoal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card"
+                    android:padding="12dp"
+                    android:text="Goal: 0"
+                    android:textColor="@color/text"/>
 
             </LinearLayout>
 
-            <!-- Goal -->
-
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reading Goal"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:layout_marginTop="24dp"/>
-
-            <TextView
-                android:id="@+id/txtGoal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 / 0 books"
-                android:textSize="18sp"
-                android:layout_marginTop="12dp"/>
-
-            <ProgressBar
-                android:id="@+id/progressGoal"
-                style="?android:attr/progressBarStyleHorizontal"
+                android:text="Recommended"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:max="100"
-                android:progress="0"
+                android:textColor="@color/text"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecommended"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
                 android:layout_marginTop="8dp"/>
 
         </LinearLayout>
-
     </ScrollView>
-
-    <!-- Recycler -->
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerBooks"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
 </FrameLayout>
