@@ -15,6 +15,9 @@
         android:theme="@style/Theme.ReadTrack"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.LibraryActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -37,7 +40,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
     </application>
 
 </manifest>
