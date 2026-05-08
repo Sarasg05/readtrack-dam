@@ -22,6 +22,8 @@ import com.ssg.readtrack.model.Reading;
 import com.ssg.readtrack.model.User;
 import com.ssg.readtrack.network.ApiService;
 import com.ssg.readtrack.network.RetrofitClient;
+import com.ssg.readtrack.ui.DetailActivity;
+import com.ssg.readtrack.ui.LibraryActivity;
 import com.ssg.readtrack.ui.LoginActivity;
 
 import java.util.ArrayList;
@@ -39,6 +41,8 @@ public class ProfileFragment extends Fragment {
     Button btnLogout;
     RecyclerView rvReading, rvWishlist, rvCompleted;
     TextView txtWishlistCount;
+    TextView txtSeeAllReading;
+    TextView txtSeeAllWishlist;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,8 +55,41 @@ public class ProfileFragment extends Fragment {
         rvReading = view.findViewById(R.id.rvReading);
         rvWishlist = view.findViewById(R.id.rvWishlist);
         rvCompleted = view.findViewById(R.id.rvCompleted);
+        txtSeeAllReading = view.findViewById(R.id.txtSeeAllReading);
+        txtSeeAllWishlist = view.findViewById(R.id.txtSeeAllWishlist);
 
         txtWishlistCount = view.findViewById(R.id.txtWishlistCount);
+
+        txtSeeAllReading.setOnClickListener(v -> {
+
+            Intent intent = new Intent(getContext(), LibraryActivity.class);
+
+            intent.putExtra("type", "reading");
+
+            startActivity(intent);
+        });
+
+        txtSeeAllWishlist.setOnClickListener(v -> {
+
+            Intent intent = new Intent(getContext(), LibraryActivity.class);
+
+            intent.putExtra("type", "wishlist");
+
+            startActivity(intent);
+        });
+
+        book -> {
+
+            Intent intent = new Intent(getContext(), DetailActivity.class);
+
+            intent.putExtra("title", book.title);
+            intent.putExtra("author", book.author.name);
+            intent.putExtra("total_pages", book.total_pages);
+            intent.putExtra("cover", book.cover);
+            intent.putExtra("book_id", book.id);
+
+            startActivity(intent);
+        }
 
         rvReading.setLayoutManager(
                 new LinearLayoutManager(getContext(),
