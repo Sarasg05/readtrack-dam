@@ -59,9 +59,12 @@ public class ProfileFragment extends Fragment {
 
             Intent intent = new Intent(getContext(), LoginActivity.class);
 
-            startActivity(intent);
+            intent.setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK |
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
+            );
 
-            requireActivity().finish();
+            startActivity(intent);
         });
 
         return view;
