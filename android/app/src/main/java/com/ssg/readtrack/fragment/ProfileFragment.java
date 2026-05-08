@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +16,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.ssg.readtrack.R;
+import com.ssg.readtrack.adapter.BookAdapter;
+import com.ssg.readtrack.model.Book;
 import com.ssg.readtrack.model.Reading;
 import com.ssg.readtrack.model.User;
 import com.ssg.readtrack.network.ApiService;
 import com.ssg.readtrack.network.RetrofitClient;
 import com.ssg.readtrack.ui.LoginActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -32,6 +37,8 @@ public class ProfileFragment extends Fragment {
     TextView txtReadingCount;
     TextView txtCompletedCount;
     Button btnLogout;
+    RecyclerView rvReading, rvWishlist, rvCompleted;
+    TextView txtWishlistCount;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +48,31 @@ public class ProfileFragment extends Fragment {
         txtReadingCount = view.findViewById(R.id.txtReadingCount);
         txtCompletedCount = view.findViewById(R.id.txtCompletedCount);
         btnLogout = view.findViewById(R.id.btnLogout);
+        rvReading = view.findViewById(R.id.rvReading);
+        rvWishlist = view.findViewById(R.id.rvWishlist);
+        rvCompleted = view.findViewById(R.id.rvCompleted);
+
+        txtWishlistCount = view.findViewById(R.id.txtWishlistCount);
+
+        rvReading.setLayoutManager(
+                new LinearLayoutManager(getContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false)
+        );
+
+        rvWishlist.setLayoutManager(
+                new LinearLayoutManager(getContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false)
+        );
+
+        rvCompleted.setLayoutManager(
+                new LinearLayoutManager(getContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false)
+        );
+
+
 
         SharedPreferences prefs = requireActivity()
                 .getSharedPreferences("app", getContext().MODE_PRIVATE);
@@ -104,21 +136,54 @@ public class ProfileFragment extends Fragment {
 
                     int reading = 0;
                     int completed = 0;
+                    int wishlist = 0;
+
+                    List<Book> readingBooks = new ArrayList<>();
+                    List<Book> wishlistBooks = new ArrayList<>();
+                    List<Book> completedBooks = new ArrayList<>();
 
                     for (Reading r : response.body()) {
 
                         if (r.status.equals("reading")) {
                             reading++;
+                            readingBooks.add(r.book);
                         }
 
                         if (r.status.equals("completed")) {
                             completed++;
+                            completedBooks.add(r.book);
+                        }
+
+                        if (r.status.equals("wishlist")){
+                            wishlist++;
+                            wishlistBooks.add(r.book);
                         }
                     }
 
                     txtReadingCount.setText("Reading: " + reading);
 
                     txtCompletedCount.setText("Completed: " + completed);
+
+                    txtWishlistCount.setText("Wishlist: " + wishlist);
+
+                    // adapters
+                    rvReading.setAdapter(
+                            new BookAdapter(readingBooks, book -> {
+
+                            })
+                    );
+
+                    rvWishlist.setAdapter(
+                            new BookAdapter(wishlistBooks, book -> {
+
+                            })
+                    );
+
+                    rvCompleted.setAdapter(
+                            new BookAdapter(completedBooks, book -> {
+
+                            })
+                    );
                 }
             }
 
