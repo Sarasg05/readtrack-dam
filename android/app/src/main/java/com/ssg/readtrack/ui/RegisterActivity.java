@@ -58,9 +58,17 @@ public class RegisterActivity extends AppCompatActivity {
 
                         Toast.makeText(RegisterActivity.this, "User created", Toast.LENGTH_SHORT).show();
 
-                        // Ir a LoginActivity
-                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                        finish();
+                        Intent intent = new Intent(
+                                RegisterActivity.this,
+                                LoginActivity.class
+                        );
+
+                        intent.setFlags(
+                                Intent.FLAG_ACTIVITY_NEW_TASK |
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        );
+
+                        startActivity(intent);
 
                     } else {
                         Toast.makeText(RegisterActivity.this, "Error creating user", Toast.LENGTH_SHORT).show();

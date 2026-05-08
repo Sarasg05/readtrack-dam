@@ -62,9 +62,17 @@ public class LoginActivity extends AppCompatActivity {
 
                         Toast.makeText(LoginActivity.this, "Login OK", Toast.LENGTH_SHORT).show();
 
-                        // Ir a MainActivity
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
+                        Intent intent = new Intent(
+                                LoginActivity.this,
+                                MainActivity.class
+                        );
+
+                        intent.setFlags(
+                                Intent.FLAG_ACTIVITY_NEW_TASK |
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        );
+
+                        startActivity(intent);
 
                     } else {
                         Toast.makeText(LoginActivity.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
