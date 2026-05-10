@@ -43,6 +43,7 @@ public class ProfileFragment extends Fragment {
     TextView txtWishlistCount;
     TextView txtSeeAllReading;
     TextView txtSeeAllWishlist;
+    TextView txtSeeAllCompleted;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class ProfileFragment extends Fragment {
         rvCompleted = view.findViewById(R.id.rvCompleted);
         txtSeeAllReading = view.findViewById(R.id.txtSeeAllReading);
         txtSeeAllWishlist = view.findViewById(R.id.txtSeeAllWishlist);
+        txtSeeAllCompleted = view.findViewById(R.id.txtSeeAllCompleted);
 
         txtWishlistCount = view.findViewById(R.id.txtWishlistCount);
 
@@ -78,18 +80,14 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
-        book -> {
+        txtSeeAllCompleted.setOnClickListener(v -> {
 
-            Intent intent = new Intent(getContext(), DetailActivity.class);
+            Intent intent = new Intent(getContext(), LibraryActivity.class);
 
-            intent.putExtra("title", book.title);
-            intent.putExtra("author", book.author.name);
-            intent.putExtra("total_pages", book.total_pages);
-            intent.putExtra("cover", book.cover);
-            intent.putExtra("book_id", book.id);
+            intent.putExtra("type", "completed");
 
             startActivity(intent);
-        }
+        });
 
         rvReading.setLayoutManager(
                 new LinearLayoutManager(getContext(),
@@ -197,6 +195,18 @@ public class ProfileFragment extends Fragment {
                         }
                     }
 
+                    if (readingBooks.isEmpty()) {
+                        rvReading.setVisibility(View.GONE);
+                    }
+
+                    if (completedBooks.isEmpty()) {
+                        rvWishlist.setVisibility(View.GONE);
+                    }
+
+                    if (wishlistBooks.isEmpty()) {
+                        rvWishlist.setVisibility(View.GONE);
+                    }
+
                     txtReadingCount.setText("Reading: " + reading);
 
                     txtCompletedCount.setText("Completed: " + completed);
@@ -205,19 +215,49 @@ public class ProfileFragment extends Fragment {
 
                     // adapters
                     rvReading.setAdapter(
-                            new BookAdapter(readingBooks, book -> {
+                            new BookAdapter(readingBooks,book -> {
+
+                                Intent intent = new Intent(getContext(), DetailActivity.class);
+
+                                intent.putExtra("title", book.title);
+                                intent.putExtra("author", book.author.name);
+                                intent.putExtra("total_pages", String.valueOf(book.total_pages));
+                                intent.putExtra("cover", book.cover);
+                                intent.putExtra("book_id", book.id);
+
+                                startActivity(intent);
 
                             })
                     );
 
                     rvWishlist.setAdapter(
-                            new BookAdapter(wishlistBooks, book -> {
+                            new BookAdapter(wishlistBooks,book -> {
+
+                                Intent intent = new Intent(getContext(), DetailActivity.class);
+
+                                intent.putExtra("title", book.title);
+                                intent.putExtra("author", book.author.name);
+                                intent.putExtra("total_pages", String.valueOf(book.total_pages));
+                                intent.putExtra("cover", book.cover);
+                                intent.putExtra("book_id", book.id);
+
+                                startActivity(intent);
 
                             })
                     );
 
                     rvCompleted.setAdapter(
-                            new BookAdapter(completedBooks, book -> {
+                            new BookAdapter(completedBooks,book -> {
+
+                                Intent intent = new Intent(getContext(), DetailActivity.class);
+
+                                intent.putExtra("title", book.title);
+                                intent.putExtra("author", book.author.name);
+                                intent.putExtra("total_pages", String.valueOf(book.total_pages));
+                                intent.putExtra("cover", book.cover);
+                                intent.putExtra("book_id", book.id);
+
+                                startActivity(intent);
 
                             })
                     );

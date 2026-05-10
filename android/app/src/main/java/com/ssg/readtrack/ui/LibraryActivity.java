@@ -1,5 +1,6 @@
 package com.ssg.readtrack.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -41,7 +42,17 @@ public class LibraryActivity extends AppCompatActivity {
 
         String type = getIntent().getStringExtra("type");
 
-        txtTitle.setText(type);
+        if (type.equals("reading")) {
+            txtTitle.setText("Continue Reading");
+        }
+
+        else if (type.equals("wishlist")) {
+            txtTitle.setText("Wishlist");
+        }
+
+        else if (type.equals("completed")) {
+            txtTitle.setText("Completed Books");
+        }
 
         loadBooks(type);
     }
@@ -79,6 +90,18 @@ public class LibraryActivity extends AppCompatActivity {
                     rvBooks.setAdapter(
                             new BookAdapter(books, book -> {
 
+                                Intent intent = new Intent(
+                                        LibraryActivity.this,
+                                        DetailActivity.class
+                                );
+
+                                intent.putExtra("title", book.title);
+                                intent.putExtra("author", book.author.name);
+                                intent.putExtra("total_pages", String.valueOf(book.total_pages));
+                                intent.putExtra("cover", book.cover);
+                                intent.putExtra("book_id", book.id);
+
+                                startActivity(intent);
                             })
                     );
                 }
