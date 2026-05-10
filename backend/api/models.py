@@ -42,6 +42,7 @@ class Reading(models.Model):
         ('reading', 'Reading'),
         ('completed', 'Completed'),
         ('abandoned', 'Abandoned'),
+        ('wishlist', 'Wishlist'),
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

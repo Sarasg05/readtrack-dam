@@ -322,7 +322,14 @@ def readings(request):
                 'id': r.id,
                 'book': {
                     'id': r.book.id,
-                    'title': r.book.title
+                    'title': r.book.title,
+                    'cover': r.book.cover,
+                    'total_pages': r.book.total_pages,
+
+                    'author': {
+                        'id': r.book.author.id,
+                        'name': r.book.author.name
+                    }
                 },
                 'status': r.status,
                 'start_date': r.start_date.isoformat() if r.start_date else None,

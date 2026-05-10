@@ -14,7 +14,9 @@ from .views import (
     reading_session_by_id,
     stats,
     me,
-    home
+    home,
+    register,
+    login
 )
 
 
@@ -42,5 +44,8 @@ urlpatterns = [
 
     path('me/', me),
 
-    path('home/', home)
+    path('home/', home),
+
+    path('register/', register),
+    path('login/', login),
 ]
