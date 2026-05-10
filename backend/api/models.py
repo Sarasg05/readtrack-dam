@@ -68,3 +68,11 @@ class ReadingSession(models.Model):
     def __str__(self):
         return f"{self.date} - {self.pages_read} pages"
 
+class Review(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    comment = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = ('user', 'book')

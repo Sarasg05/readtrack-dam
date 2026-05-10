@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-from .models import AnnualGoal, Author, Genre, Book, Reading, ReadingSession
+from .models import AnnualGoal, Author, Genre, Book, Reading, ReadingSession, Review
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -582,4 +582,28 @@ def home(request):
         "books_read": books_read,
         "goal": target
     })
+@csrf_exempt
+def reviews(request):
 
+    user = get_user_from_token(request)
+
+    if not user:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    if request.method == 'POST':
+
+        body = json.loads(request.body)
+
+        review, created = Review.objects.update_or_create(
+            user=user,
+            book_id=body['book'],
+            defaults={
+                'rating': body['rating'],
+                'comment': body.get('comment', '')
+            }
+        )
+
+        return JsonResponse({
+            'ok': True,
+            'created': created
+        })
