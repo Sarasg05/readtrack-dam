@@ -125,13 +125,21 @@ public class SearchFragment extends Fragment {
 
     private void filterBooks(String query) {
 
+        String q = query.toLowerCase().trim();
+
         filteredBooks.clear();
 
         for (Book book : allBooks) {
 
-            if (book.title.toLowerCase().contains(query.toLowerCase())) {
+            String title = book.title != null ? book.title.toLowerCase() : "";
+            String author = book.author != null && book.author.name != null
+                    ? book.author.name.toLowerCase()
+                    : "";
+
+            if (title.contains(q) || author.contains(q)) {
                 filteredBooks.add(book);
             }
+
         }
 
         adapter.notifyDataSetChanged();
