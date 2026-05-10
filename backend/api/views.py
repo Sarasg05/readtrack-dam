@@ -506,8 +506,7 @@ def stats(request):
 
     completed_readings = Reading.objects.filter(
         user=user,
-        status='completed',
-        end_date__year=current_year
+        status='completed'
     )
 
     books_completed = completed_readings.count()
@@ -515,7 +514,8 @@ def stats(request):
     pages_read = 0
 
     for r in completed_readings:
-        pages_read += r.book.total_pages
+        if r.book:
+            pages_read += r.book.total_pages
 
     goal = AnnualGoal.objects.filter(
         user=user,
