@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class StatsFragment extends Fragment {
 
         ApiService api = RetrofitClient.getClient().create(ApiService.class);
 
-        api.getStats(token).enqueue(new Callback<StatsResponse>() {
+        api.getStats("Token " + token).enqueue(new Callback<StatsResponse>() {
 
             @Override
             public void onResponse(Call<StatsResponse> call, Response<StatsResponse> response) {
@@ -74,12 +75,14 @@ public class StatsFragment extends Fragment {
                     );
 
                     progressBar.setProgress(stats.progress);
+                }else {
+                    Log.e("STATS_ERROR", "Response not successful: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<StatsResponse> call, Throwable t) {
-
+                Log.e("STATS_ERROR", "Error loading stats", t);
             }
         });
 
