@@ -6,6 +6,7 @@ import com.ssg.readtrack.model.LoginResponse;
 import com.ssg.readtrack.model.Reading;
 import com.ssg.readtrack.model.ReadingRequest;
 import com.ssg.readtrack.model.RegisterRequest;
+import com.ssg.readtrack.model.ReviewRequest;
 import com.ssg.readtrack.model.StatsResponse;
 import com.ssg.readtrack.model.User;
 
@@ -46,4 +47,10 @@ public interface ApiService {
 
     @GET("api/home/")
     Call<HomeResponse> getHome(@Header("Authorization") String token);
+
+    @POST("api/reviews/")
+    Call<Void> createReview(
+            @Header("Authorization") String token,
+            @Body ReviewRequest request
+    );
 }
