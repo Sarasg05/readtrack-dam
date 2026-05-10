@@ -1,58 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:padding="16dp"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imgBookDetail"
-        android:layout_width="150dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:src="@mipmap/ic_launcher"/>
-
-    <TextView
-        android:id="@+id/txtTitleDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        android:text="Title"/>
-
-    <TextView
-        android:id="@+id/txtAuthorDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Author"/>
-
-    <TextView
-        android:id="@+id/txtTotalPagesDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total pages"/>
-
-    <TextView
-        android:id="@+id/txtGenresDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Genres"/>
-
-    <Button
-        android:id="@+id/btnStartReading"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start Reading"
-        android:layout_marginTop="16dp"/>
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnCompleted"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mark as Completed"
-        android:layout_marginTop="8dp"/>
+        <!-- PORTADA GRANDE -->
+        <ImageView
+            android:id="@+id/imgBookDetail"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scaleType="centerCrop"/>
 
-</LinearLayout>
+        <!-- INFO -->
+        <LinearLayout
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txtTitleDetail"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/txtAuthorDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/txtGenresDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <!-- SINOPSIS -->
+        <TextView
+            android:id="@+id/txtSynopsis"
+            android:padding="16dp"
+            android:text="Sinopsis..."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- BOTONES -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btnReading"
+                android:text="📖"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnCompleted"
+                android:text="✅"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnWishlist"
+                android:text="⭐"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <!-- ESTRELLAS (reseña futura) -->
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:numStars="5"
+            android:stepSize="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+</ScrollView>
