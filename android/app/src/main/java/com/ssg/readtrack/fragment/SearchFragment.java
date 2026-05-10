@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ssg.readtrack.R;
 import com.ssg.readtrack.adapter.BookAdapter;
@@ -34,6 +35,8 @@ public class SearchFragment extends Fragment {
     RecyclerView recyclerView;
     EditText etSearch;
 
+    TextView txtEmpty;
+
     List<Book> allBooks = new ArrayList<>();
     List<Book> filteredBooks = new ArrayList<>();
 
@@ -45,6 +48,7 @@ public class SearchFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerSearch);
         etSearch = view.findViewById(R.id.etSearch);
+        txtEmpty = view.findViewById(R.id.txtEmpty);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -139,7 +143,12 @@ public class SearchFragment extends Fragment {
             if (title.contains(q) || author.contains(q)) {
                 filteredBooks.add(book);
             }
+        }
 
+        if (filteredBooks.isEmpty()) {
+            txtEmpty.setVisibility(View.VISIBLE);
+        } else {
+            txtEmpty.setVisibility(View.GONE);
         }
 
         adapter.notifyDataSetChanged();
