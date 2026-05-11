@@ -5,7 +5,8 @@
     android:id="@+id/searchRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false">
+    android:fitsSystemWindows="false"
+    android:background="@color/bg">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/searchBox"
@@ -15,7 +16,13 @@
         app:startIconDrawable="@android:drawable/ic_menu_search"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:boxBackgroundMode="filled"
+        app:boxBackgroundColor="@color/card"
+        app:boxCornerRadiusTopStart="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusBottomEnd="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etSearch"

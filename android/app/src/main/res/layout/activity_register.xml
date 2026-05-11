@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
+    android:background="@color/bg"
     tools:context=".ui.RegisterActivity">
 
     <LinearLayout
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Create Account"
-            android:textColor="@android:color/white"
+            android:textColor="@color/text"
             android:textSize="32sp"
             android:textStyle="bold"
             android:layout_gravity="center"
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Track your reading journey"
-            android:textColor="#B0B0B0"
+            android:textColor="@color/text"
             android:textSize="16sp"
             android:layout_gravity="center"
             android:layout_marginBottom="32dp"/>
@@ -46,8 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#BB86FC"
-            android:textColor="@android:color/white"
-            android:textColorHint="#AAAAAA"
+            android:textColor="@color/text"
+            android:textColorHint="@color/textSecondary"
             android:padding="12dp"
             android:layout_marginTop="20dp"/>
 
@@ -58,8 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#BB86FC"
-            android:textColor="@android:color/white"
-            android:textColorHint="#AAAAAA"
+            android:textColor="@color/text"
+            android:textColorHint="@color/textSecondary"
             android:padding="12dp"
             android:layout_marginTop="16dp"/>
 
