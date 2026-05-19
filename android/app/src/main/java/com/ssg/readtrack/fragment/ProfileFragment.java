@@ -132,6 +132,8 @@ public class ProfileFragment extends Fragment {
             );
 
             startActivity(intent);
+
+            requireActivity().finish();
         });
 
         return view;
