@@ -577,9 +577,17 @@ def home(request):
     # 3. libros completados
     books_read = Reading.objects.filter(user=user, status="completed").count()
 
+    pages_red = 0
+
+    completed = Reading.objects.filter(user=user, status="completed")
+
+    for r in completed:
+        pages_red += r.book.total_pages
+
     return JsonResponse({
         "current_book": current_book,
         "books_read": books_read,
+        "pages_read": pages_red,
         "goal": target
     })
 @csrf_exempt
