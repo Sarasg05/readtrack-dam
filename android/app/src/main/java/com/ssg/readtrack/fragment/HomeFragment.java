@@ -60,6 +60,14 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        loadHome();
+        loadRecommended();
+    }
+
     private String getToken() {
         SharedPreferences prefs = requireActivity()
                 .getSharedPreferences("app", getContext().MODE_PRIVATE);
