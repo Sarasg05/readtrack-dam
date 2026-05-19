@@ -1,23 +1,114 @@
 [
   {
-    "title": "El Hobbit",
+    "title": "The Hobbit",
     "author": "J.R.R. Tolkien",
     "total_pages": 310,
     "genres": ["Fantasy"],
-    "cover": "https://covers.openlibrary.org/b/id/6979861-L.jpg"
+    "synopsis": "Bilbo Bolsón emprende una aventura inesperada.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/91b0C2YNSrL.jpg"
   },
   {
     "title": "1984",
     "author": "George Orwell",
     "total_pages": 328,
     "genres": ["Dystopia"],
-    "cover": "https://covers.openlibrary.org/b/id/7222246-L.jpg"
+    "synopsis": "Un mundo controlado por el Gran Hermano.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/91SZSW8qSsL.jpg"
   },
   {
     "title": "Dune",
     "author": "Frank Herbert",
     "total_pages": 412,
     "genres": ["Science Fiction"],
-    "cover": "https://covers.openlibrary.org/b/id/8108691-L.jpg"
+    "synopsis": "Paul Atreides viaja al planeta Arrakis.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/81ym3QUd3KL.jpg"
+  },
+  {
+    "title": "Harry Potter and the Sorcerer's Stone",
+    "author": "J.K. Rowling",
+    "total_pages": 309,
+    "genres": ["Fantasy"],
+    "synopsis": "Harry descubre que es un mago.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/81YOuOGFCJL.jpg"
+  },
+  {
+    "title": "The Name of the Wind",
+    "author": "Patrick Rothfuss",
+    "total_pages": 662,
+    "genres": ["Fantasy"],
+    "synopsis": "Kvothe cuenta la historia de su vida.",
+    "cover": "https://covers.openlibrary.org/b/isbn/9780756404079-L.jpg"
+  },
+  {
+    "title": "The Martian",
+    "author": "Andy Weir",
+    "total_pages": 369,
+    "genres": ["Science Fiction"],
+    "synopsis": "Un astronauta queda atrapado en Marte.",
+    "cover": "https://covers.openlibrary.org/b/isbn/9780553418026-L.jpg"
+  },
+  {
+    "title": "Atomic Habits",
+    "author": "James Clear",
+    "total_pages": 320,
+    "genres": ["Self Help"],
+    "synopsis": "Pequeños hábitos producen grandes cambios.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/91bYsX41DVL._AC_UL600_SR600,600_.jpg"
+  },
+  {
+    "title": "The Silent Patient",
+    "author": "Alex Michaelides",
+    "total_pages": 336,
+    "genres": ["Thriller"],
+    "synopsis": "Una mujer deja de hablar tras un asesinato.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/81JJPDNlxSL.jpg"
+  },
+  {
+    "title": "The Psychology of Money",
+    "author": "Morgan Housel",
+    "total_pages": 256,
+    "genres": ["Finance"],
+    "synopsis": "Lecciones sobre riqueza y comportamiento.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/71g2ednj0JL.jpg"
+  },
+  {
+    "title": "Mistborn",
+    "author": "Brandon Sanderson",
+    "total_pages": 541,
+    "genres": ["Fantasy"],
+    "synopsis": "Una ladrona descubre poderes mágicos.",
+    "cover": "https://covers.openlibrary.org/b/isbn/9780765311788-L.jpg"
+  },
+  {
+    "title": "Sapiens",
+    "author": "Yuval Noah Harari",
+    "total_pages": 498,
+    "genres": ["History"],
+    "synopsis": "Historia de la humanidad.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/713jIoMO3UL.jpg"
+  },
+  {
+    "title": "Project Hail Mary",
+    "author": "Andy Weir",
+    "total_pages": 496,
+    "genres": ["Science Fiction"],
+    "synopsis": "Una misión para salvar la Tierra.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/81zD9kaVW9L.jpg"
+  },
+  {
+    "title": "The Midnight Library",
+    "author": "Matt Haig",
+    "total_pages": 304,
+    "genres": ["Fantasy"],
+    "synopsis": "Una biblioteca entre vidas alternativas.",
+    "cover": "https://images-na.ssl-images-amazon.com/images/I/81J6APjwxlL.jpg"
+  },
+  {
+    "title": "The Da Vinci Code",
+    "author": "Dan Brown",
+    "total_pages": 489,
+    "genres": ["Mystery"],
+    "synopsis": "Un misterio religioso lleno de pistas.",
+    "cover": "https://covers.openlibrary.org/b/isbn/9780307474278-L.jpg"
   }
 ]
