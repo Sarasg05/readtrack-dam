@@ -1,6 +1,7 @@
 package com.ssg.readtrack.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -38,6 +39,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences prefs =
+                getSharedPreferences("app", MODE_PRIVATE);
+
+        String token = prefs.getString("token", "");
+
+        if (token.isEmpty()) {
+
+            startActivity(
+                    new Intent(this, LoginActivity.class)
+            );
+
+            finish();
+            return;
+        }
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 
