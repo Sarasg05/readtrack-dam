@@ -1,4 +1,5 @@
 package com.ssg.readtrack.network;
+import com.ssg.readtrack.model.AnnualGoalRequest;
 import com.ssg.readtrack.model.Book;
 import com.ssg.readtrack.model.HomeResponse;
 import com.ssg.readtrack.model.LoginRequest;
@@ -52,5 +53,11 @@ public interface ApiService {
     Call<Void> createReview(
             @Header("Authorization") String token,
             @Body ReviewRequest request
+    );
+
+    @POST("api/annual_goals/")
+    Call<Void> createGoal(
+            @Header("Authorization") String token,
+            @Body AnnualGoalRequest request
     );
 }
