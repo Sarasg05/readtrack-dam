@@ -13,10 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ssg.readtrack.R;
 import com.ssg.readtrack.adapter.BookAdapter;
+import com.ssg.readtrack.model.AnnualGoalRequest;
 import com.ssg.readtrack.model.Book;
 import com.ssg.readtrack.model.Reading;
 import com.ssg.readtrack.model.User;
@@ -27,6 +30,7 @@ import com.ssg.readtrack.ui.LibraryActivity;
 import com.ssg.readtrack.ui.LoginActivity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,7 +42,8 @@ public class ProfileFragment extends Fragment {
     TextView txtUsername;
     TextView txtReadingCount;
     TextView txtCompletedCount;
-    Button btnLogout;
+    Button btnLogout, btnSaveGoal;
+    EditText etGoal;
     RecyclerView rvReading, rvWishlist, rvCompleted;
     TextView txtWishlistCount;
     TextView txtSeeAllReading;
@@ -53,6 +58,8 @@ public class ProfileFragment extends Fragment {
         txtReadingCount = view.findViewById(R.id.txtReadingCount);
         txtCompletedCount = view.findViewById(R.id.txtCompletedCount);
         btnLogout = view.findViewById(R.id.btnLogout);
+        btnSaveGoal = view.findViewById(R.id.btnSaveGoal);
+        etGoal = view.findViewById(R.id.etGoal);
         rvReading = view.findViewById(R.id.rvReading);
         rvWishlist = view.findViewById(R.id.rvWishlist);
         rvCompleted = view.findViewById(R.id.rvCompleted);
@@ -119,6 +126,65 @@ public class ProfileFragment extends Fragment {
         loadUser(api, token);
 
         loadReadings(api, token);
+
+        btnSaveGoal.setOnClickListener(v -> {
+
+            String goalText = etGoal.getText().toString();
+
+            if (goalText.isEmpty()) {
+
+                Toast.makeText(getContext(),
+                        "Enter a goal",
+                        Toast.LENGTH_SHORT).show();
+
+                return;
+            }
+
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+
+            int targetBooks = Integer.parseInt(goalText);
+
+            AnnualGoalRequest request =
+                    new AnnualGoalRequest(year, targetBooks);
+
+            api.createGoal(token, request)
+                    .enqueue(new Callback<Void>() {
+
+                        @Override
+                        public void onResponse(
+                                Call<Void> call,
+                                Response<Void> response
+                        ) {
+
+                            if (response.isSuccessful()) {
+
+                                Toast.makeText(
+                                        getContext(),
+                                        "Goal saved",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+
+                            } else {
+
+                                Toast.makeText(
+                                        getContext(),
+                                        "Error saving goal",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+
+                            Toast.makeText(
+                                    getContext(),
+                                    t.getMessage(),
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
+                    });
+        });
 
         btnLogout.setOnClickListener(v -> {
 
