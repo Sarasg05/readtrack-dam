@@ -24,6 +24,7 @@ import com.ssg.readtrack.model.User;
 import com.ssg.readtrack.network.ApiService;
 import com.ssg.readtrack.network.RetrofitClient;
 import com.ssg.readtrack.ui.DetailActivity;
+import com.ssg.readtrack.ui.LoginActivity;
 
 import java.util.List;
 
@@ -111,6 +112,27 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
+
+                if (response.code() == 401) {
+
+                    SharedPreferences prefs = requireActivity()
+                            .getSharedPreferences("app", getContext().MODE_PRIVATE);
+
+                    prefs.edit().remove("token").apply();
+
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+
+                    intent.setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK |
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    );
+
+                    startActivity(intent);
+
+                    requireActivity().finish();
+
+                    return;
+                }
 
                 if (!response.isSuccessful() || response.body() == null) return;
 
