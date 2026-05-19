@@ -14,9 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.ssg.readtrack.R;
 import com.ssg.readtrack.adapter.BookAdapter;
 import com.ssg.readtrack.model.AnnualGoalRequest;
@@ -49,6 +52,7 @@ public class ProfileFragment extends Fragment {
     TextView txtSeeAllReading;
     TextView txtSeeAllWishlist;
     TextView txtSeeAllCompleted;
+    ImageView imgAvatar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,6 +70,7 @@ public class ProfileFragment extends Fragment {
         txtSeeAllReading = view.findViewById(R.id.txtSeeAllReading);
         txtSeeAllWishlist = view.findViewById(R.id.txtSeeAllWishlist);
         txtSeeAllCompleted = view.findViewById(R.id.txtSeeAllCompleted);
+        imgAvatar = view.findViewById(R.id.imgAvatar);
 
         txtWishlistCount = view.findViewById(R.id.txtWishlistCount);
 
@@ -126,6 +131,11 @@ public class ProfileFragment extends Fragment {
         loadUser(api, token);
 
         loadReadings(api, token);
+
+        Glide.with(this)
+                .load(R.drawable.profile)
+                .transform(new CircleCrop())
+                .into(imgAvatar);
 
         btnSaveGoal.setOnClickListener(v -> {
 

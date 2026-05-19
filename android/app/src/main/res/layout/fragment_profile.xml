@@ -8,7 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:elevation="6dp">
 
         <!-- HEADER -->
 
@@ -22,10 +23,12 @@
 
             <ImageView
                 android:id="@+id/imgAvatar"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:src="@drawable/ic_profile"
-                android:scaleType="centerCrop"/>
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/profile"
+                android:scaleType="centerCrop"
+                android:background="@drawable/avatar_bg"
+                android:padding="3dp"/>
 
             <TextView
                 android:id="@+id/txtUsername"

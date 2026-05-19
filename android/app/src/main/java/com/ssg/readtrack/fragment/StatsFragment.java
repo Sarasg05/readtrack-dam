@@ -109,42 +109,67 @@ public class StatsFragment extends Fragment {
 
         int completed = stats.books_completed;
         int target = stats.target_books;
+
         int remaining = Math.max(target - completed, 0);
 
         List<PieEntry> entries = new ArrayList<>();
+
         entries.add(new PieEntry(completed, "Completed"));
-        entries.add(new PieEntry(remaining, "Remaining"));
 
-        PieDataSet dataSet = new PieDataSet(entries, "Goal Progress");
+        if (remaining > 0) {
+            entries.add(new PieEntry(remaining, "Remaining"));
+        }
 
-        dataSet.setColors(new int[]{
-                android.R.color.holo_green_light,
-                android.R.color.holo_red_light
-        }, getContext());
+        PieDataSet dataSet = new PieDataSet(entries, "");
+
+        // COLORES MODERNOS
+        dataSet.setColors(
+                getResources().getColor(R.color.green),
+                getResources().getColor(R.color.gray_light)
+        );
+
+        dataSet.setSliceSpace(3f);
+        dataSet.setSelectionShift(5f);
 
         PieData data = new PieData(dataSet);
+
+        data.setDrawValues(true);
+
+        data.setValueTextSize(14f);
+
         pieChart.setData(data);
 
-        pieChart.setUsePercentValues(true);
+        // ESTILO GENERAL
         pieChart.getDescription().setEnabled(false);
-        pieChart.setCenterText("Goal");
-        pieChart.setDrawHoleEnabled(true);
-        pieChart.setHoleRadius(40f);
 
-        pieChart.invalidate();
+        pieChart.setDrawHoleEnabled(true);
+
+        pieChart.setHoleRadius(75f);
+
+        pieChart.setTransparentCircleRadius(80f);
 
         pieChart.setUsePercentValues(false);
-        pieChart.getDescription().setEnabled(false);
-        pieChart.setDrawEntryLabels(true);
-        pieChart.setDrawHoleEnabled(true);
-        pieChart.setHoleRadius(45f);
-        pieChart.setTransparentCircleRadius(50f);
 
         pieChart.setEntryLabelTextSize(12f);
-        pieChart.setCenterText("Goal Progress");
-        pieChart.setCenterTextSize(14f);
 
-        pieChart.animateY(1000);
+        pieChart.setEntryLabelColor(android.graphics.Color.WHITE);
+
+        pieChart.getLegend().setEnabled(false);
+
+        // TEXTO CENTRAL
+        pieChart.setCenterText(
+                stats.progress + "%\ncompleted"
+        );
+
+        pieChart.setCenterTextSize(20f);
+
+        pieChart.setCenterTextColor(
+                getResources().getColor(R.color.text)
+        );
+
+        // ANIMACIÓN
+        pieChart.animateY(1400);
+
         pieChart.invalidate();
     }
 }
