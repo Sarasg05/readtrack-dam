@@ -65,14 +65,13 @@ public class HomeFragment extends Fragment {
         super.onResume();
 
         loadHome();
-        loadRecommended();
     }
 
     private String getToken() {
         SharedPreferences prefs = requireActivity()
                 .getSharedPreferences("app", getContext().MODE_PRIVATE);
 
-        return "Bearer " + prefs.getString("token", "");
+        return prefs.getString("token", "");
     }
 
     private void loadHome() {
@@ -97,6 +96,7 @@ public class HomeFragment extends Fragment {
 
                 // STATS
                 tvBooks.setText("Books: " + data.books_read);
+                tvPages.setText("Pages: " + data.pages_read);
                 tvGoal.setText("Goal: " + data.goal);
 
                 int progress = (data.goal == 0) ? 0 :
