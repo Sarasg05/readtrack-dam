@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ssg.readtrack.R;
-import com.ssg.readtrack.adapter.BookAdapter;
+import com.ssg.readtrack.adapter.BookHorizontalAdapter;
 import com.ssg.readtrack.model.Book;
 import com.ssg.readtrack.model.HomeResponse;
 import com.ssg.readtrack.model.User;
@@ -146,7 +146,7 @@ public class HomeFragment extends Fragment {
 
                 List<Book> books = response.body();
 
-                BookAdapter adapter = new BookAdapter(books, book -> {
+                BookHorizontalAdapter adapter = new BookHorizontalAdapter(books, book -> {
 
                     Intent intent = new Intent(getContext(), DetailActivity.class);
 
@@ -156,6 +156,8 @@ public class HomeFragment extends Fragment {
                     intent.putExtra("cover", book.cover);
                     intent.putExtra("book_id", book.id);
 
+                    intent.putExtra("synopsis", book.synopsis);
+
                     if (book.genres != null && !book.genres.isEmpty()) {
                         intent.putExtra("genres", book.genres.get(0));
                     }
@@ -164,6 +166,7 @@ public class HomeFragment extends Fragment {
                 });
 
                 rvRecommended.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
