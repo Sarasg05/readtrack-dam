@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.ssg.readtrack.R;
 import com.ssg.readtrack.model.Book;
 
@@ -48,6 +50,7 @@ public class BookHorizontalAdapter extends RecyclerView.Adapter<BookHorizontalAd
 
         Glide.with(holder.itemView.getContext())
                 .load(book.cover)
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(28)))
                 .into(holder.imgCover);
 
         holder.itemView.setOnClickListener(v -> {

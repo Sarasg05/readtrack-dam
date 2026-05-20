@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.ssg.readtrack.R;
-import com.ssg.readtrack.adapter.BookAdapter;
+import com.ssg.readtrack.adapter.BookHorizontalAdapter;
 import com.ssg.readtrack.model.AnnualGoalRequest;
 import com.ssg.readtrack.model.Book;
 import com.ssg.readtrack.model.Reading;
@@ -293,7 +293,7 @@ public class ProfileFragment extends Fragment {
 
                     // adapters
                     rvReading.setAdapter(
-                            new BookAdapter(readingBooks,book -> {
+                            new BookHorizontalAdapter(readingBooks,book -> {
 
                                 Intent intent = new Intent(getContext(), DetailActivity.class);
 
@@ -302,6 +302,11 @@ public class ProfileFragment extends Fragment {
                                 intent.putExtra("total_pages", String.valueOf(book.total_pages));
                                 intent.putExtra("cover", book.cover);
                                 intent.putExtra("book_id", book.id);
+                                intent.putExtra("synopsis", book.synopsis);
+
+                                if (book.genres != null && !book.genres.isEmpty()) {
+                                    intent.putExtra("genres", book.genres.get(0));
+                                }
 
                                 startActivity(intent);
 
@@ -309,7 +314,7 @@ public class ProfileFragment extends Fragment {
                     );
 
                     rvWishlist.setAdapter(
-                            new BookAdapter(wishlistBooks,book -> {
+                            new BookHorizontalAdapter(wishlistBooks,book -> {
 
                                 Intent intent = new Intent(getContext(), DetailActivity.class);
 
@@ -318,6 +323,11 @@ public class ProfileFragment extends Fragment {
                                 intent.putExtra("total_pages", String.valueOf(book.total_pages));
                                 intent.putExtra("cover", book.cover);
                                 intent.putExtra("book_id", book.id);
+                                intent.putExtra("synopsis", book.synopsis);
+
+                                if (book.genres != null && !book.genres.isEmpty()) {
+                                    intent.putExtra("genres", book.genres.get(0));
+                                }
 
                                 startActivity(intent);
 
@@ -325,7 +335,7 @@ public class ProfileFragment extends Fragment {
                     );
 
                     rvCompleted.setAdapter(
-                            new BookAdapter(completedBooks,book -> {
+                            new BookHorizontalAdapter(completedBooks,book -> {
 
                                 Intent intent = new Intent(getContext(), DetailActivity.class);
 
@@ -334,6 +344,11 @@ public class ProfileFragment extends Fragment {
                                 intent.putExtra("total_pages", String.valueOf(book.total_pages));
                                 intent.putExtra("cover", book.cover);
                                 intent.putExtra("book_id", book.id);
+                                intent.putExtra("synopsis", book.synopsis);
+
+                                if (book.genres != null && !book.genres.isEmpty()) {
+                                    intent.putExtra("genres", book.genres.get(0));
+                                }
 
                                 startActivity(intent);
 
