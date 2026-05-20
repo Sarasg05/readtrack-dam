@@ -4,7 +4,8 @@ import android.content.SharedPreferences;
     import android.os.Bundle;
     import android.widget.Button;
     import android.widget.EditText;
-    import android.widget.ImageView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
     import android.widget.RatingBar;
     import android.widget.TextView;
     import android.widget.Toast;
@@ -68,8 +69,7 @@ public class DetailActivity extends AppCompatActivity {
         total_pages.setText(p != null ? p : "");
         genres.setText(g != null ? g : "");
 
-        Button btnStart = findViewById(R.id.btnReading);
-
+        ImageButton btnStart = findViewById(R.id.btnReading);
         btnStart.setOnClickListener(v -> {
             if (bookId == -1) {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
@@ -105,8 +105,7 @@ public class DetailActivity extends AppCompatActivity {
             });
         });
 
-        Button btnCompleted = findViewById(R.id.btnCompleted);
-
+        ImageButton btnCompleted = findViewById(R.id.btnCompleted);
         btnCompleted.setOnClickListener(v -> {
             if (bookId == -1) {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
@@ -138,8 +137,7 @@ public class DetailActivity extends AppCompatActivity {
             });
         });
 
-        Button btnWishlist = findViewById(R.id.btnWishlist);
-
+        ImageButton btnWishlist = findViewById(R.id.btnWishlist);
         btnWishlist.setOnClickListener(v -> {
 
             ApiService api = RetrofitClient.getClient().create(ApiService.class);
