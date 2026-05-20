@@ -10,4 +10,7 @@ public class Book {
     public String synopsis;
     public List<String> genres;
     public String cover;
+
+    public float average_rating;
+    public int reviews_count;
 }
