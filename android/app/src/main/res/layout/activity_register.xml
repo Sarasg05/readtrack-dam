@@ -48,7 +48,7 @@
             android:backgroundTint="#BB86FC"
             android:textColor="@color/text"
             android:textColorHint="@color/textSecondary"
-            android:padding="12dp"
+            android:padding="14dp"
             android:layout_marginTop="20dp"/>
 
         <EditText
@@ -60,21 +60,22 @@
             android:backgroundTint="#BB86FC"
             android:textColor="@color/text"
             android:textColorHint="@color/textSecondary"
-            android:padding="12dp"
-            android:layout_marginTop="16dp"/>
+            android:padding="14dp"
+            android:layout_marginTop="18dp"/>
 
         <Button
             android:id="@+id/btnRegister"
             android:text="Register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="28dp"
             android:backgroundTint="#7C4DFF"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:minHeight="56dp"
             android:textAllCaps="false"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:background="@drawable/btn_primary"/>
 
         <TextView
             android:id="@+id/txtLogin"
