@@ -20,7 +20,8 @@ import android.widget.ImageView;
     import com.ssg.readtrack.R;
     import com.ssg.readtrack.model.ReadingRequest;
     import com.ssg.readtrack.model.ReviewRequest;
-    import com.ssg.readtrack.network.ApiService;
+import com.ssg.readtrack.model.ReviewResponse;
+import com.ssg.readtrack.network.ApiService;
     import com.ssg.readtrack.network.RetrofitClient;
 
     import retrofit2.Call;
@@ -38,12 +39,51 @@ public class DetailActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_detail);
 
+        int bookId = getIntent().getIntExtra("book_id", -1);
+
         title = findViewById(R.id.txtTitleDetail);
         author = findViewById(R.id.txtAuthorDetail);
         total_pages = findViewById(R.id.txtTotalPagesDetail);
         genres = findViewById(R.id.txtGenresDetail);
         image = findViewById(R.id.imgBookDetail);
         RatingBar ratingBar = findViewById(R.id.ratingBar);
+        EditText etReview = findViewById(R.id.etReview);
+
+        ApiService api = RetrofitClient.getClient().create(ApiService.class);
+
+        SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
+
+        String token = prefs.getString("token", "");
+
+        api.getMyReview(token, bookId)
+                .enqueue(new Callback<ReviewResponse>() {
+
+                    @Override
+                    public void onResponse(
+                            Call<ReviewResponse> call,
+                            Response<ReviewResponse> response
+                    ) {
+
+                        if (response.isSuccessful()
+                                && response.body() != null) {
+
+                            ReviewResponse review = response.body();
+
+                            ratingBar.setRating(review.rating);
+
+                            etReview.setText(review.comment);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Call<ReviewResponse> call,
+                            Throwable t
+                    ) {
+
+                    }
+                });
+
 
         // Recibir datos
         String t = getIntent().getStringExtra("title");
@@ -56,7 +96,6 @@ public class DetailActivity extends AppCompatActivity {
 
         txtSynopsis.setText(synopsis != null ? synopsis : "No synopsis available");
 
-        int bookId = getIntent().getIntExtra("book_id", -1);
 
         String cover = getIntent().getStringExtra("cover");
         if (cover != null) {
@@ -75,11 +114,6 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            ApiService api = RetrofitClient.getClient().create(ApiService.class);
-
-            SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
-            String token = prefs.getString("token", "");
 
             if (token.isEmpty()) {
                 Toast.makeText(this, "Session expired", Toast.LENGTH_SHORT).show();
@@ -112,11 +146,6 @@ public class DetailActivity extends AppCompatActivity {
                 return;
             }
 
-            ApiService api = RetrofitClient.getClient().create(ApiService.class);
-
-            SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
-            String token = prefs.getString("token", "");
-
             if (token.isEmpty()) {
                 Toast.makeText(this, "Session expired", Toast.LENGTH_SHORT).show();
                 return;
@@ -140,10 +169,11 @@ public class DetailActivity extends AppCompatActivity {
         ImageButton btnWishlist = findViewById(R.id.btnWishlist);
         btnWishlist.setOnClickListener(v -> {
 
-            ApiService api = RetrofitClient.getClient().create(ApiService.class);
 
-            SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
-            String token = prefs.getString("token", "");
+            if (token.isEmpty()) {
+                Toast.makeText(this, "Session expired", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             ReadingRequest req = new ReadingRequest(bookId, "wishlist");
 
@@ -162,13 +192,13 @@ public class DetailActivity extends AppCompatActivity {
 
         ratingBar.setOnRatingBarChangeListener((bar, rating, fromUser) -> {
 
-            ApiService api = RetrofitClient.getClient().create(ApiService.class);
+            if (!fromUser) {
+                return;
+            }
 
-            SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
+            String comment = etReview.getText().toString();
 
-            String token = prefs.getString("token", "");
-
-            ReviewRequest req = new ReviewRequest(bookId, (int) rating);
+            ReviewRequest req = new ReviewRequest(bookId, (int) rating, comment);
 
             api.createReview(token, req).enqueue(new Callback<Void>() {
 
@@ -196,16 +226,9 @@ public class DetailActivity extends AppCompatActivity {
             });
         });
 
-        EditText etReview = findViewById(R.id.etReview);
         Button btnSendReview = findViewById(R.id.btnSendReview);
 
         btnSendReview.setOnClickListener(v -> {
-
-            ApiService api = RetrofitClient.getClient().create(ApiService.class);
-
-            SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
-
-            String token = prefs.getString("token", "");
 
             String comment = etReview.getText().toString();
 

@@ -8,6 +8,7 @@ import com.ssg.readtrack.model.Reading;
 import com.ssg.readtrack.model.ReadingRequest;
 import com.ssg.readtrack.model.RegisterRequest;
 import com.ssg.readtrack.model.ReviewRequest;
+import com.ssg.readtrack.model.ReviewResponse;
 import com.ssg.readtrack.model.StatsResponse;
 import com.ssg.readtrack.model.User;
 
@@ -59,5 +60,11 @@ public interface ApiService {
     Call<Void> createGoal(
             @Header("Authorization") String token,
             @Body AnnualGoalRequest request
+    );
+
+    @GET("api/reviews/my")
+    Call<ReviewResponse> getMyReview(
+            @Header("Authorization") String token,
+            @Query("book") int bookId
     );
 }
