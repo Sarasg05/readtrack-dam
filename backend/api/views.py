@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 import uuid
 import datetime
-from django.db.models import Sum
+from django.db.models import Sum, Avg
 from datetime import date
 
 
@@ -83,7 +83,12 @@ def books(request):
                 'total_pages': b.total_pages,
                 'synopsis': b.synopsis,
                 'genres': [g.name for g in b.genres.all()],
-                'cover': b.cover if b.cover else None
+                'cover': b.cover if b.cover else None,
+                "average_rating": Review.objects.filter(book=b).aggregate(
+                    Avg("rating")
+                )["rating__avg"] or 0,
+
+                "reviews_count": Review.objects.filter(book=b).count(),
             })
 
         return JsonResponse(response, safe=False)
@@ -615,3 +620,26 @@ def reviews(request):
             'ok': True,
             'created': created
         })
+
+@csrf_exempt
+def my_review(request):
+
+    user = get_user_from_token(request)
+
+    if not user:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    book_id = request.GET.get('book')
+
+    review = Review.objects.filter(
+        user=user,
+        book_id=book_id
+    ).first()
+
+    if not review:
+        return JsonResponse({}, status=404)
+
+    return JsonResponse({
+        "rating": review.rating,
+        "comment": review.comment
+    })

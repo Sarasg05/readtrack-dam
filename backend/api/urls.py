@@ -16,7 +16,9 @@ from .views import (
     me,
     home,
     register,
-    login
+    login,
+    my_review,
+    reviews
 )
 
 
@@ -48,4 +50,7 @@ urlpatterns = [
 
     path('register/', register),
     path('login/', login),
+
+    path('reviews/my/', my_review),
+    path('reviews/', reviews),
 ]
