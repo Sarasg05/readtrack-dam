@@ -20,12 +20,16 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
 
     @GET("api/books/")
     Call<List<Book>> getBooks();
+
+    @GET("api/books/{id}/")
+    Call<Book> getBookById(@Path("id") int id);
 
     @POST("api/readings/")
     Call<Void> createReading(

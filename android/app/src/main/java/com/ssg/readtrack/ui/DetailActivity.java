@@ -18,7 +18,8 @@ import android.widget.ImageView;
 
     import com.bumptech.glide.Glide;
     import com.ssg.readtrack.R;
-    import com.ssg.readtrack.model.ReadingRequest;
+import com.ssg.readtrack.model.Book;
+import com.ssg.readtrack.model.ReadingRequest;
     import com.ssg.readtrack.model.ReviewRequest;
 import com.ssg.readtrack.model.ReviewResponse;
 import com.ssg.readtrack.network.ApiService;
@@ -91,10 +92,30 @@ public class DetailActivity extends AppCompatActivity {
         String p = getIntent().getStringExtra("total_pages");
         String g = getIntent().getStringExtra("genres");
 
-        String synopsis = getIntent().getStringExtra("synopsis");
+
         TextView txtSynopsis = findViewById(R.id.txtSynopsis);
 
-        txtSynopsis.setText(synopsis != null ? synopsis : "No synopsis available");
+        api.getBookById(bookId).enqueue(new Callback<Book>() {
+            @Override
+            public void onResponse(Call<Book> call, Response<Book> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+
+                    Book book = response.body();
+
+                    txtSynopsis.setText(
+                            book.synopsis != null && !book.synopsis.isEmpty()
+                                    ? book.synopsis
+                                    : "No synopsis available"
+                    );
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Book> call, Throwable t) {
+                txtSynopsis.setText("No synopsis available");
+            }
+        });
 
 
         String cover = getIntent().getStringExtra("cover");
