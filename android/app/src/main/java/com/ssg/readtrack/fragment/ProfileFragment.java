@@ -23,6 +23,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.ssg.readtrack.R;
 import com.ssg.readtrack.adapter.BookHorizontalAdapter;
 import com.ssg.readtrack.model.AnnualGoalRequest;
+import com.ssg.readtrack.model.AnnualGoalResponse;
 import com.ssg.readtrack.model.Book;
 import com.ssg.readtrack.model.Reading;
 import com.ssg.readtrack.model.User;
@@ -158,12 +159,12 @@ public class ProfileFragment extends Fragment {
                     new AnnualGoalRequest(year, targetBooks);
 
             api.createGoal(token, request)
-                    .enqueue(new Callback<Void>() {
+                    .enqueue(new Callback<AnnualGoalResponse>() {
 
                         @Override
                         public void onResponse(
-                                Call<Void> call,
-                                Response<Void> response
+                                Call<AnnualGoalResponse> call,
+                                Response<AnnualGoalResponse> response
                         ) {
 
                             if (response.isSuccessful()) {
@@ -185,7 +186,7 @@ public class ProfileFragment extends Fragment {
                         }
 
                         @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
+                        public void onFailure(Call<AnnualGoalResponse> call, Throwable t) {
 
                             Toast.makeText(
                                     getContext(),
