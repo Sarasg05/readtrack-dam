@@ -202,13 +202,18 @@ def annual_goals(request):
         if not body.get('target_books'):
             return JsonResponse({'error': 'Missing target_books'}, status=400)
 
-        annual_goal = AnnualGoal.objects.create(
+        annual_goal, created = AnnualGoal.objects.update_or_create(
             user=user,
             year=body['year'],
-            target_books=body['target_books']
+            defaults={
+                'target_books': body['target_books']
+            }
         )
 
-        return JsonResponse({'id': annual_goal.id}, status=201)
+        return JsonResponse(
+            {'id': annual_goal.id, 'created': created},
+            status=201 if created else 200
+        )
 
     return JsonResponse({'error': 'Unsupported HTTP method'}, status=405)
 
