@@ -142,7 +142,8 @@ def book_by_id(request, id):
                 'name': book.author.name
             },
             'genres': [g.name for g in book.genres.all()],
-            'cover': book.cover if book.cover else None
+            'cover': book.cover if book.cover else None,
+            'synopsis': book.synopsis
         })
 
     elif request.method == 'PUT':
