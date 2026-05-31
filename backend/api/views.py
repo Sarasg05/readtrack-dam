@@ -141,6 +141,7 @@ def book_by_id(request, id):
                 'id': book.author.id,
                 'name': book.author.name
             },
+            'total_pages': book.total_pages,
             'genres': [g.name for g in book.genres.all()],
             'cover': book.cover if book.cover else None,
             'synopsis': book.synopsis
