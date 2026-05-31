@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/bg">
 
     <LinearLayout
@@ -21,14 +22,17 @@
             android:background="@drawable/bg_card"
             android:padding="24dp">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imgAvatar"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@drawable/profile"
-                android:scaleType="centerCrop"
-                android:background="@drawable/avatar_bg"
-                android:padding="3dp"/>
+                android:scaleType="fitCenter"
+                android:padding="6dp"
+                app:shapeAppearanceOverlay="@style/CircleImageView"
+                app:strokeColor="#BB86FC"
+                app:strokeWidth="2dp"/>
+
 
             <TextView
                 android:id="@+id/txtUsername"

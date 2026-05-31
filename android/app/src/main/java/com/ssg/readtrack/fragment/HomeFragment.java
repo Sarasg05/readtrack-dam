@@ -150,17 +150,7 @@ public class HomeFragment extends Fragment {
 
                     Intent intent = new Intent(getContext(), DetailActivity.class);
 
-                    intent.putExtra("title", book.title);
-                    intent.putExtra("author", book.author.name);
-                    intent.putExtra("total_pages", String.valueOf(book.total_pages));
-                    intent.putExtra("cover", book.cover);
                     intent.putExtra("book_id", book.id);
-
-                    intent.putExtra("synopsis", book.synopsis);
-
-                    if (book.genres != null && !book.genres.isEmpty()) {
-                        intent.putExtra("genres", book.genres.get(0));
-                    }
 
                     startActivity(intent);
                 });

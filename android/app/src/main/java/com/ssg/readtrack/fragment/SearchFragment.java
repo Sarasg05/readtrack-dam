@@ -56,15 +56,7 @@ public class SearchFragment extends Fragment {
 
             Intent intent = new Intent(getContext(), DetailActivity.class);
 
-            intent.putExtra("title", book.title);
-            intent.putExtra("author", book.author.name);
-            intent.putExtra("total_pages", String.valueOf(book.total_pages));
             intent.putExtra("book_id", book.id);
-            intent.putExtra("cover", book.cover);
-
-            if (book.genres != null && !book.genres.isEmpty()) {
-                intent.putExtra("genres", book.genres.get(0));
-            }
 
             startActivity(intent);
         });

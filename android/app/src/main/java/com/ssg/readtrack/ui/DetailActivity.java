@@ -86,48 +86,42 @@ public class DetailActivity extends AppCompatActivity {
                 });
 
 
-        // Recibir datos
-        String t = getIntent().getStringExtra("title");
-        String a = getIntent().getStringExtra("author");
-        String p = getIntent().getStringExtra("total_pages");
-        String g = getIntent().getStringExtra("genres");
-
-
         TextView txtSynopsis = findViewById(R.id.txtSynopsis);
 
         api.getBookById(bookId).enqueue(new Callback<Book>() {
             @Override
             public void onResponse(Call<Book> call, Response<Book> response) {
 
-                if (response.isSuccessful() && response.body() != null) {
+                if(response.isSuccessful() && response.body() != null){
 
                     Book book = response.body();
 
-                    txtSynopsis.setText(
-                            book.synopsis != null && !book.synopsis.isEmpty()
-                                    ? book.synopsis
-                                    : "No synopsis available"
+                    title.setText(book.title);
+
+                    author.setText(book.author.name);
+
+                    total_pages.setText(
+                            String.valueOf(book.total_pages)
                     );
+
+                    if(book.genres != null && !book.genres.isEmpty()){
+                        genres.setText(book.genres.get(0));
+                    }
+
+                    txtSynopsis.setText(book.synopsis);
+
+                    Glide.with(DetailActivity.this)
+                            .load(book.cover)
+                            .into(image);
                 }
             }
 
             @Override
             public void onFailure(Call<Book> call, Throwable t) {
-                txtSynopsis.setText("No synopsis available");
+
             }
         });
 
-
-        String cover = getIntent().getStringExtra("cover");
-        if (cover != null) {
-            Glide.with(this).load(cover).into(image);
-        }
-
-        // Mostrar datos
-        title.setText(t != null ? t : "");
-        author.setText(a != null ? a : "");
-        total_pages.setText(p != null ? p : "");
-        genres.setText(g != null ? g : "");
 
         ImageButton btnStart = findViewById(R.id.btnReading);
         btnStart.setOnClickListener(v -> {
