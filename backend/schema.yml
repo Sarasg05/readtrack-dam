@@ -1,0 +1,368 @@
+openapi: 3.0.3
+info:
+  title: ReadTrack API
+  description: Fachada REST nativa para la gestión de lecturas, objetivos anuales y reseñas literarias. Desarrollada para el Proyecto Intermodular de DAM.
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:8000/api
+    description: Servidor de desarrollo local
+
+security:
+  - TokenUUID: []
+
+paths:
+  /register/:
+    post:
+      summary: Registrar usuario
+      description: Crea una cuenta de usuario nueva usando Django Auth.
+      security: []  # No requiere token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username: {type: string}
+                password: {type: string}
+      responses:
+        '200':
+          description: Usuario creado con éxito.
+        '400':
+          description: Faltan campos obligatorios o el usuario ya existe.
+
+  /login/:
+    post:
+      summary: Iniciar sesión
+      description: Autentica las credenciales y genera un Token UUID dinámico de sesión.
+      security: []  # No requiere token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username: {type: string}
+                password: {type: string}
+      responses:
+        '200':
+          description: Login correcto. Devuelve el token asignado.
+        '401':
+          description: Credenciales inválidas.
+
+  /books/:
+    get:
+      summary: Listar todos los libros
+      description: Retorna la colección completa de libros con sus autores, géneros y valoraciones medias.
+      security: []
+      responses:
+        '200':
+          description: Matriz JSON con el catálogo de libros.
+    post:
+      summary: Crear un libro
+      description: Registra un nuevo libro en la plataforma.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, author, total_pages, cover]
+              properties:
+                title: {type: string}
+                author: {type: integer, description: "ID de la entidad Author"}
+                total_pages: {type: integer}
+                cover: {type: string}
+                synopsis: {type: string}
+                genres: {type: array, items: {type: integer}}
+      responses:
+        '201':
+          description: Libro creado. Devuelve su ID único.
+
+  /books/{id}/:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: {type: integer}
+    get:
+      summary: Obtener libro por ID
+      security: []
+      responses:
+        '200':
+          description: Datos detallados del libro solicitado.
+        '404':
+          description: Libro no encontrado.
+    put:
+      summary: Modificar campos de un libro
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: {type: string}
+                total_pages: {type: integer}
+      responses:
+        '200':
+          description: Libro actualizado correctamente.
+    delete:
+      summary: Eliminar libro del catálogo
+      security: []
+      responses:
+        '200':
+          description: Libro eliminado con éxito.
+
+  /annual_goals/:
+    get:
+      summary: Obtener objetivos anuales del usuario autenticado
+      responses:
+        '200':
+          description: Lista de metas anuales del usuario.
+    post:
+      summary: Crear o actualizar un objetivo anual
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [year, target_books]
+              properties:
+                year: {type: integer}
+                target_books: {type: integer}
+      responses:
+        '200':
+          description: Objetivo actualizado.
+        '201':
+          description: Objetivo creado.
+
+  /annual_goals/{id}/:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: {type: integer}
+    get:
+      summary: Obtener objetivo anual específico
+      responses:
+        '200':
+          description: Datos del objetivo anual.
+    put:
+      summary: Actualizar objetivo anual específico
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                year: {type: integer}
+                target_books: {type: integer}
+      responses:
+        '200':
+          description: Objetivo modificado correctamente.
+
+  /authors/:
+    get:
+      summary: Listar autores
+      security: []
+      responses:
+        '200':
+          description: Lista de autores registrados.
+
+  /authors/{id}/:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: {type: integer}
+    get:
+      summary: Obtener autor por ID
+      security: []
+      responses:
+        '200':
+          description: Datos del autor.
+
+  /genres/:
+    get:
+      summary: Listar géneros
+      security: []
+      responses:
+        '200':
+          description: Lista de géneros disponibles.
+
+  /genres/{id}/:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: {type: integer}
+    get:
+      summary: Obtener género por ID
+      security: []
+      responses:
+        '200':
+          description: Datos del género.
+
+  /readings/:
+    get:
+      summary: Listar estados de lectura personales
+      responses:
+        '200':
+          description: Colección de lecturas del usuario.
+    post:
+      summary: Registrar o actualizar estado de lectura
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [book, status]
+              properties:
+                book: {type: integer}
+                status: {type: string}
+      responses:
+        '201':
+          description: Estado de lectura guardado.
+
+  /readings/{id}/:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: {type: integer}
+    get:
+      summary: Obtener lectura individual
+      responses:
+        '200':
+          description: Información de la lectura.
+    put:
+      summary: Actualizar estado de lectura
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status: {type: string}
+      responses:
+        '200':
+          description: Lectura actualizada.
+    delete:
+      summary: Cancelar o eliminar lectura
+      responses:
+        '200':
+          description: Registro de lectura eliminado.
+
+  /reading_sessions/:
+    get:
+      summary: Listar sesiones de lectura cronológicas del usuario
+      responses:
+        '200':
+          description: Historial de páginas y minutos leídos.
+    post:
+      summary: Guardar una nueva sesión de lectura
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reading, pages_read, minutes_read, date]
+              properties:
+                reading: {type: integer}
+                pages_read: {type: integer}
+                minutes_read: {type: integer}
+                date: {type: string, format: date}
+      responses:
+        '201':
+          description: Sesión almacenada correctamente.
+
+  /reading_sessions/{id}/:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: {type: integer}
+    get:
+      summary: Consultar sesión por ID
+      responses:
+        '200':
+          description: Datos de la sesión de lectura.
+    delete:
+      summary: Eliminar registro de sesión
+      responses:
+        '200':
+          description: Sesión eliminada de la base de datos.
+
+  /stats/:
+    get:
+      summary: Obtener métricas calculadas y porcentajes de objetivos anuales
+      responses:
+        '200':
+          description: Estadísticas procesadas de páginas y libros del año actual.
+
+  /me/:
+    get:
+      summary: Retornar perfil del usuario autenticado
+      responses:
+        '200':
+          description: Datos del usuario activo (id y username).
+
+  /home/:
+    get:
+      summary: Panel de inicio personalizado
+      description: Resumen general con el libro actual, metas globales y progreso.
+      responses:
+        '200':
+          description: Estructura de inicio cargada correctamente.
+
+  /reviews/:
+    post:
+      summary: Crear o actualizar reseña de un libro
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [book, rating]
+              properties:
+                book: {type: integer}
+                rating: {type: integer}
+                comment: {type: string}
+      responses:
+        '200':
+          description: Reseña guardada exitosamente.
+
+  /reviews/my/:
+    get:
+      summary: Consultar reseña propia de un libro
+      parameters:
+        - name: book
+          in: query
+          required: true
+          description: ID del libro a consultar
+          schema: {type: integer}
+      responses:
+        '200':
+          description: Datos de la opinión redactada por el usuario.
+        '404':
+          description: El usuario no ha reseñado este libro aún.
+
+components:
+  securitySchemes:
+    TokenUUID:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: "Introduce tu token UUID directamente (ejemplo: 4fa67123-b12a-b456-7890abcdef12)"
